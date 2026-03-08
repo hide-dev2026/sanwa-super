@@ -1,0 +1,9 @@
+body { font-family: sans-serif; margin:0; padding:0; }
+header { background: #3b6ee6; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; }
+header button { background:white; color:#3b6ee6; border:none; padding:5px 10px; border-radius:4px; }
+.page { padding:10px; }
+.card { border:1px solid #ccc; border-radius:6px; padding:10px; margin:10px 0; }
+.card img { width:100%; max-width:200px; display:block; }
+button { padding:8px 12px; margin:5px 0; border:none; border-radius:5px; cursor:pointer; }
+.fav-btn { background:red; color:white; }
+footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; background:#eee; padding:10px 0; }

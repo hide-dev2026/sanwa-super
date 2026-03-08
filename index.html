@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple PWA</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- ★ PWA 用 manifest -->
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <header>
+    <h1 id="header-title">Sale Info</h1>
+    <button id="back-btn" onclick="showPage('home')">← ホーム</button>
+  </header>
+
+  <div id="home" class="page">
+    <button id="notify-btn">🔔 通知設定</button>
+
+    <div class="card">
+      <img src="apple.jpg" alt="リンゴ">
+      <p>お買い得！リンゴ 200円</p>
+      <button onclick="showPage('product')">詳細</button>
+    </div>
+    <div class="card">
+      <img src="beef.jpg" alt="牛肉">
+      <p>特価 牛肉 500円</p>
+      <button onclick="showPage('product')">詳細</button>
+    </div>
+  </div>
+
+  <div id="product" class="page" style="display:none;">
+    <img src="apple.jpg" alt="リンゴ">
+    <h2>お買い得！リンゴ</h2>
+    <p>価格: 200円</p>
+    <button class="fav-btn">❤️ お気に入りに追加</button>
+  </div>
+
+  <div id="store" class="page" style="display:none;">
+    <h2>サンプルスーパー</h2>
+    <p>〒123-4567 東京都○○区1-2-3</p>
+    <button onclick="window.open('https://maps.google.com')">🗺 地図を開く</button>
+    <button onclick="window.location.href='tel:03-1234-5678'">📞 03-1234-5678</button>
+    <button onclick="showPage('home')">ホームに戻る</button>
+  </div>
+
+  <footer>
+    <button onclick="showPage('home')">🏠 ホーム</button>
+    <button onclick="showPage('store')">📍 お店情報</button>
+  </footer>
+
+  <script src="app.js"></script>
+
+  <!-- ★ Service Worker 登録 -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(() => console.log('Service Worker registered'))
+        .catch(err => console.log('SW registration failed:', err));
+    }
+  </script>
+</body>
+</html>
