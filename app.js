@@ -1,25 +1,33 @@
-// ページ切替
+// ========================================
+// ページ表示制御
+// showPage() は id を受け取り対象の .page を表示、他は非表示にする。
+// 以前は "product" 詳細ページがあったが現在は使わないため該当処理を削除。
+// ヘッダタイトルの書き換えもここで行う。
+// ========================================
 function showPage(pageId) {
   const pages = document.querySelectorAll('.page');
   pages.forEach(p => p.style.display = 'none');
-  document.getElementById(pageId).style.display = 'block';
 
+  // 指定されたページ要素があれば表示
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.style.display = 'block';
+  }
+
+  // ヘッダタイトル更新
   const header = document.getElementById('header-title');
-  const backBtn = document.getElementById('back-btn');
-
-  if(pageId === 'home') {
-    header.textContent = 'Sale Info';
-    backBtn.style.display = 'none';
-  } else if(pageId === 'product') {
-    header.textContent = '商品詳細';
-    backBtn.style.display = 'inline-block';
-  } else if(pageId === 'store') {
+  if (pageId === 'home') {
+    header.textContent = '生鮮館　三和スーパー';
+  } else if (pageId === 'store') {
     header.textContent = 'お店情報';
-    backBtn.style.display = 'inline-block';
   }
 }
 
-// 通知ボタン
+// ========================================
+// プッシュ通知の初期化
+// 通知APIを使ってユーザーに特売情報を送る。
+// ボタン押下で許可リクエストを行い、成功すれば確認の通知を出す。
+// ========================================
 const notifyBtn = document.getElementById('notify-btn');
 notifyBtn.addEventListener('click', async () => {
   if ('Notification' in window) {
@@ -36,7 +44,85 @@ notifyBtn.addEventListener('click', async () => {
   }
 });
 
-// PWA: Service Worker登録
+// ========================================
+// Google Sheets から CSV を取得し DOM に反映するヘルパー
+// ========================================
+async function fetchCSV(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}`);
+  const text = await res.text();
+  return text.trim().split('\n').map(line => line.split(',').map(cell => cell.trim()));
+}
+
+async function loadSales() {
+  try {
+    const rows = await fetchCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=0');
+    const container = document.getElementById('sales-list');
+    container.innerHTML = '';
+    rows.slice(1).forEach(r => {
+      const [name, price] = r;
+      const div = document.createElement('div');
+      div.className = 'sale-item';
+      div.innerHTML = `<span class="name">${name}</span><span class="price">${price}</span>`;
+      container.appendChild(div);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function loadNotices() {
+  try {
+    const rows = await fetchCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=1022873183');
+    const container = document.getElementById('notice-list');
+    container.innerHTML = '';
+    rows.slice(1).forEach(r => {
+      const p = document.createElement('p');
+      p.textContent = r.join(' ');
+      container.appendChild(p);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+async function loadProducts() {
+  try {
+    const rows = await fetchCSV('https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=142758616');
+    const container = document.getElementById('product-list');
+    container.innerHTML = '';
+    rows.slice(1).forEach(r => {
+      const [name, price, img] = r;
+      const card = document.createElement('div');
+      card.className = 'card';
+      if (img) {
+        const imgEl = document.createElement('img');
+        imgEl.src = img;
+        imgEl.alt = name;
+        card.appendChild(imgEl);
+      }
+      const p = document.createElement('p');
+      p.textContent = `${name} ${price}`;
+      card.appendChild(p);
+      container.appendChild(card);
+    });
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+// ページロード時にデータを読み込む
+window.addEventListener('load', () => {
+  loadSales();
+  loadNotices();
+  loadProducts();
+});
+
+// ========================================
+// PWA 機能の初期化
+// ページ読み込み時に service-worker.js を登録し、
+// オフライン対応やプッシュの受信ができるようにする。
+// ========================================
 if('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('service-worker.js')

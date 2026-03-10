@@ -11,37 +11,52 @@
 </head>
 <body>
   <header>
-    <h1 id="header-title">Sale Info</h1>
-    <button id="back-btn" onclick="showPage('home')">← ホーム</button>
+    <h1 id="header-title">生鮮館　三和スーパー</h1>
   </header>
 
   <div id="home" class="page">
     <button id="notify-btn">🔔 通知設定</button>
 
-    <div class="card">
-      <img src="apple.jpg" alt="リンゴ">
-      <p>お買い得！リンゴ 200円</p>
-      <button onclick="showPage('product')">詳細</button>
-    </div>
-    <div class="card">
-      <img src="beef.jpg" alt="牛肉">
-      <p>特価 牛肉 500円</p>
-      <button onclick="showPage('product')">詳細</button>
-    </div>
-  </div>
+    <section class="sale-section">
+      <h2>本日の特売情報</h2>
+      <div id="sales-list">
+        <!-- CSVから読み込んだ特売アイテムがここに挿入される -->
+      </div>
+    </section>
 
-  <div id="product" class="page" style="display:none;">
-    <img src="apple.jpg" alt="リンゴ">
-    <h2>お買い得！リンゴ</h2>
-    <p>価格: 200円</p>
-    <button class="fav-btn">❤️ お気に入りに追加</button>
-  </div>
+    <!-- ★ お店からのお知らせ -->
+    <section class="notice-section">
+      <h2>お店からのお知らせ</h2>
+      <div id="notice-list">
+        <!-- お知らせがここに挿入される -->
+      </div>
+    </section>
+
+    <!-- ★ 商品情報 -->
+    <section class="product-section">
+      <h2>商品情報</h2>
+      <div id="product-list">
+        <!-- 商品カードがここに挿入される -->
+      </div>
+    </section>
 
   <div id="store" class="page" style="display:none;">
-    <h2>サンプルスーパー</h2>
-    <p>〒123-4567 東京都○○区1-2-3</p>
-    <button onclick="window.open('https://maps.google.com')">🗺 地図を開く</button>
-    <button onclick="window.location.href='tel:03-1234-5678'">📞 03-1234-5678</button>
+    <h2>生鮮館株式会社 三和スーパー</h2>
+
+    <!-- ★ 営業情報 -->
+    <p class="store-hours">
+      営業日　: 月曜日〜土曜日<br>
+      営業時間: 9:00〜18:00<br>
+      定休日　: 日曜日
+    </p>
+    <p>〒729-3107 広島県福山市新市町大字常1811-1</p>
+    <!-- ★ お問い合わせ -->
+    <p>お問い合わせ先: <a href="mailto:info@sanwa-super.jp">info@sanwa-super.jp</a></p>
+    <button onclick="window.open('https://www.google.com/maps?q=広島県福山市新市町大字常1811-1')">
+    🗺 地図を開く
+    </button>
+
+    <button onclick="window.location.href='tel:0847-53-8973'">📞 03-1234-5678</button>
     <button onclick="showPage('home')">ホームに戻る</button>
   </div>
 

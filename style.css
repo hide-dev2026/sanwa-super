@@ -1,9 +1,167 @@
-body { font-family: sans-serif; margin:0; padding:0; }
+/* === 基本レイアウト & リセット === */
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#fafafa; color:#333; margin:0; padding:0; }
+
+/* ヘッダーのスタイル */
 header { background: #3b6ee6; color:white; padding:10px; display:flex; justify-content:space-between; align-items:center; }
+header h1 { margin:0; font-size:1.5em; }
 header button { background:white; color:#3b6ee6; border:none; padding:5px 10px; border-radius:4px; }
-.page { padding:10px; }
-.card { border:1px solid #ccc; border-radius:6px; padding:10px; margin:10px 0; }
+
+/* ページコンテナ */
+.page { padding:10px; max-width:600px; margin:0 auto; }
+
+/* 汎用カードスタイル */
+.card { border:1px solid #ccc; border-radius:6px; padding:10px; margin:10px 0; background:#fff; transition: transform 0.2s, box-shadow 0.2s; }
+.card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
 .card img { width:100%; max-width:200px; display:block; }
+
+/* ボタン共通 */
 button { padding:8px 12px; margin:5px 0; border:none; border-radius:5px; cursor:pointer; }
 .fav-btn { background:red; color:white; }
+
+/* フッター固定メニュー */
 footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; background:#eee; padding:10px 0; }
+
+/* ★ 特売情報エリアのデザイン */
+.sale-section {
+  background: #fff8e1;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.sale-section h2 {
+  margin-bottom: 12px;
+  color: #d35400;
+  font-size: 1.2em;
+  background: linear-gradient(45deg, #ffd700, #ff8c00);
+  padding: 8px 12px;
+  border-radius: 4px;
+  position: relative;
+}
+.sale-section h2::before {
+  content: "🎯 ";
+}
+
+.notice-section {
+  background: #e8f5e9;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.notice-section h2 {
+  margin-bottom: 12px;
+  color: #2e7d32;
+  font-size: 1.2em;
+  background: linear-gradient(45deg, #a5d6a7, #66bb6a);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+.notice-section h2::before {
+  content: "📢 ";
+}
+
+.product-section {
+  background: #e3f2fd;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.product-section h2 {
+  margin-bottom: 12px;
+  color: #1565c0;
+  font-size: 1.2em;
+  background: linear-gradient(45deg, #90caf9, #42a5f5);
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+/* 動的リスト用コンテナ余白 */
+#sales-list,
+#notice-list,
+#product-list {
+  margin-top: 12px;
+}
+
+#product h2 {
+  font-size: 1.4em;
+  color: #2980b9;
+  text-align: center;
+  background: linear-gradient(45deg, #81d4fa, #29b6f6);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 0;
+}
+
+.sale-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.sale-item:last-child {
+  border-bottom: none;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.price {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.store-message {
+  background: #f0f8ff;
+  padding: 12px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 1.1em;
+  color: #333;
+  text-align: center;
+  font-weight: bold;
+}
+
+/* ★ お店情報ページのスタイル */
+#store {
+  background: #fff;
+  padding: 20px 16px;
+  border-radius: 10px;
+  margin: 16px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+
+#store h2 {
+  text-align: center;
+  font-size: 1.4em;
+  color: #3b6ee6;
+  margin-bottom: 12px;
+}
+
+.store-hours {
+  background: #fffbf0;
+  border-left: 4px solid #f39c12;
+  padding: 10px 12px;
+  margin: 12px 0;
+  font-weight: bold;
+}
+
+#store p {
+  margin: 6px 0;
+}
+
+#store a {
+  color: #3b6ee6;
+  text-decoration: none;
+}
+
+/* ボタンはページ全体で共通だが、#store内では少し余白を増やす */
+#store button {
+  margin: 8px 0;
+}

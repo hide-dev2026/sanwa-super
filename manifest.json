@@ -7,12 +7,12 @@
   "theme_color": "#ff6600",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "sanwa_super_icon_192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "icon-512.png",
+      "src": "sanwa_super_icon_512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
