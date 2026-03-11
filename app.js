@@ -25,23 +25,33 @@ function showPage(pageId) {
 
 // ========================================
 // プッシュ通知の初期化
-// 通知APIを使ってユーザーに特売情報を送る。
-// ボタン押下で許可リクエストを行い、成功すれば確認の通知を出す。
 // ========================================
-const notifyBtn = document.getElementById('notify-btn');
-notifyBtn.addEventListener('click', async () => {
-  if ('Notification' in window) {
+// DOM のロード後にボタンを取得し、イベントを設定する。
+window.addEventListener('load', () => {
+  const notifyBtn = document.getElementById('notify-btn');
+  if (!notifyBtn) return; // 念のため存在確認
+
+  notifyBtn.addEventListener('click', async () => {
+    if (!('Notification' in window)) {
+      alert('このブラウザは通知に対応していません');
+      return;
+    }
+
+    // すでに拒否されている場合は再リクエストできない
+    if (Notification.permission === 'denied') {
+      alert('通知は既に拒否されています。ブラウザの設定をご確認ください。');
+      return;
+    }
+
     const permission = await Notification.requestPermission();
-    if(permission === 'granted') {
+    if (permission === 'granted') {
       new Notification('通知が有効になりました！', {
         body: '新着特売情報をお知らせします。',
       });
     } else {
       alert('通知が許可されませんでした');
     }
-  } else {
-    alert('このブラウザは通知に対応していません');
-  }
+  });
 });
 
 // ========================================
