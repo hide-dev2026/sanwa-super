@@ -1,6 +1,6 @@
 {
-  "name": "Sale Info",
-  "short_name": "SaleInfo",
+  "name": "三和スーパーAPP",
+  "short_name": "三和スーパー",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#ffffff",
