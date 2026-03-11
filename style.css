@@ -133,8 +133,10 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   background: #fff;
   padding: 20px 16px;
   border-radius: 10px;
-  margin: 16px;
+  margin: 16px auto;   /* 横方向は自動で中央に */
+  max-width: 600px;    /* 他ページと同じ横幅制限 */
   box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+  text-align: center; /* 全体をセンター寄せ */
 }
 
 #store h2 {
@@ -148,12 +150,58 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   background: #fffbf0;
   border-left: 4px solid #f39c12;
   padding: 10px 12px;
-  margin: 12px 0;
+  margin: 12px 0 60px; /* さらに余白を拡大して郵便番号との間隔をしっかり確保 */
   font-weight: bold;
+  text-align: left; /* テキストを左寄せに */
 }
 
 #store p {
   margin: 6px 0;
+}
+
+/* 住所と地図ボタンを横並びにし左寄せ */
+.store-address {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin: 60px 0 24px; /* 上部に余白を追加して定休日との間隔を強調 */
+}
+.store-address p {
+  margin: 0;
+}
+.store-address button {
+  position: absolute;
+  right: 0;
+}
+
+/* お問い合わせも左寄せ */
+.store-contact {
+  text-align: left;
+  margin-bottom: 24px; /* お問い合わせと電話番号の間隔 */
+}
+
+/* 電話番号と発信ボタン */
+.store-phone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin: 12px 0;
+}
+.store-phone span {
+  flex: 1;
+}
+.store-phone button {
+  position: absolute;
+  right: 0;
+  margin-left: 0;
+}
+
+/* 地図と電話ボタンの幅を統一 */
+.aligned-btn {
+  min-width: 120px;
+  text-align: center;
 }
 
 #store a {
@@ -164,4 +212,7 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 /* ボタンはページ全体で共通だが、#store内では少し余白を増やす */
 #store button {
   margin: 8px 0;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
