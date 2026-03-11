@@ -1,11 +1,12 @@
-const CACHE_NAME = 'simple-pwa-cache-v3';
+const CACHE_NAME = 'simple-pwa-cache-v5';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/app.js',
-  '/apple.jpg',
-  '/beef.jpg',
+  './',
+  './index.html',
+  './style.css',
+  './app.js',
+  './manifest.json',
+  './apple.jpg',
+  './beef.jpg',
 ];
 
 // インストール
