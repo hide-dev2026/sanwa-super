@@ -147,7 +147,7 @@ async function subscribeUser() {
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM"
+    applicationServerKey: urlBase64ToUint8Array("BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM")
   });
 
   console.log("購読情報:", JSON.stringify(subscription));
