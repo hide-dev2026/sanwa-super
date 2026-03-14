@@ -140,3 +140,40 @@ if('serviceWorker' in navigator) {
       .catch(err => console.log('Service Worker登録失敗', err));
   });
 }
+
+// 通知購読処理
+async function subscribeUser() {
+  const registration = await navigator.serviceWorker.ready;
+
+  const subscription = await registration.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM"
+  });
+
+  console.log("購読情報:", JSON.stringify(subscription));
+
+  // 後で作る GAS に送信
+  sendSubscriptionToServer(subscription);
+}
+
+// GAS に購読情報を送信（仮）
+async function sendSubscriptionToServer(subscription) {
+  await fetch("GAS_URL_ここに後で入れる", {
+    method: "POST",
+    body: JSON.stringify(subscription),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+// 通知ボタンと連動
+document.getElementById("notifyButton").addEventListener("click", async () => {
+  const permission = await Notification.requestPermission();
+
+  if (permission === "granted") {
+    subscribeUser();
+  } else {
+    alert("通知が許可されませんでした");
+  }
+});

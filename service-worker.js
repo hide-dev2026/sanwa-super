@@ -36,3 +36,13 @@ self.addEventListener('fetch', event => {
     })
   );
 });
+
+// プッシュ通知の受信
+self.addEventListener("push", event => {
+  const data = event.data ? event.data.json() : {};
+
+  self.registration.showNotification(data.title || "新しい通知", {
+    body: data.body || "内容がありません",
+    icon: "/icons/icon-192.png" // 実際のパスに合わせて変更
+  });
+});
