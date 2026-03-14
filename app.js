@@ -1,3 +1,5 @@
+const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
+
 // ========================================
 // ページ表示制御
 // showPage() は id を受け取り対象の .page を表示、他は非表示にする。
@@ -147,7 +149,7 @@ async function subscribeUser() {
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array("BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM")
+    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
   });
 
   console.log("購読情報:", JSON.stringify(subscription));
