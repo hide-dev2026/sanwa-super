@@ -158,7 +158,7 @@ async function subscribeUser() {
 
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
-  await fetch("GAS_URL_ここに後で入れる", {
+  await fetch("Ghttps://script.google.com/macros/s/AKfycbzlZzU27giROzGU0Y95KS6siq53a-tULOdnCpNK-VPEV4DooPH1nqXxspXnwoR50uwd/exec", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
