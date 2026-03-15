@@ -160,7 +160,7 @@ async function subscribeUser() {
 
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
-  await fetch("Ghttps://script.google.com/macros/s/AKfycbzlZzU27giROzGU0Y95KS6siq53a-tULOdnCpNK-VPEV4DooPH1nqXxspXnwoR50uwd/exec", {
+  await fetch("https://script.google.com/macros/s/AKfycbzlZzU27giROzGU0Y95KS6siq53a-tULOdnCpNK-VPEV4DooPH1nqXxspXnwoR50uwd/exec", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
@@ -170,7 +170,7 @@ async function sendSubscriptionToServer(subscription) {
 }
 
 // 通知ボタンと連動
-document.getElementById("notifyButton").addEventListener("click", async () => {
+document.getElementById("notify-btn"").addEventListener("click", async () => {
   const permission = await Notification.requestPermission();
 
   if (permission === "granted") {
