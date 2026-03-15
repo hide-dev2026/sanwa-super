@@ -170,7 +170,7 @@ async function sendSubscriptionToServer(subscription) {
 }
 
 // 通知ボタンと連動
-document.getElementById("notify-btn"").addEventListener("click", async () => {
+document.getElementById("notify-btn").addEventListener("click", async () => {
   const permission = await Notification.requestPermission();
 
   if (permission === "granted") {
