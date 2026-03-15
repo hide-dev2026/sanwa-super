@@ -5,8 +5,8 @@ const urlsToCache = [
   './style.css',
   './app.js',
   './manifest.json',
-  './apple.jpg',
-  './beef.jpg',
+  './icon-192.png',
+  './on-512.png'
 ];
 
 // インストール
