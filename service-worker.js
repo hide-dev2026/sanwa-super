@@ -30,6 +30,13 @@ self.addEventListener('activate', event => {
 
 // fetch（キャッシュ優先 + ネットワークフォールバック）
 self.addEventListener('fetch', event => {
+  const url = new URL(event.request.url);
+
+  // 👉 WorkerのURLはキャッシュ処理しない
+  if (url.hostname.includes('workers.dev')) {
+    return; // ← これ重要
+  }
+
   event.respondWith(
     caches.match(event.request).then(resp => {
       return resp || fetch(event.request);
