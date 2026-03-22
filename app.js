@@ -160,7 +160,7 @@ async function subscribeUser() {
 
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
-  await fetch("https://script.google.com/macros/s/AKfycbzlZzU27giROzGU0Y95KS6siq53a-tULOdnCpNK-VPEV4DooPH1nqXxspXnwoR50uwd/exec", {
+  await fetch("https://sanwa-push.winwin-hide.workers.dev", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
