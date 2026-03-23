@@ -5,8 +5,8 @@ const urlsToCache = [
   './style.css',
   './app.js',
   './manifest.json',
-  './icon-192.png',
-  './on-512.png'
+  './sanwa_super_icon_192.png',
+  './sanwa_super_icon_512.png'
 ];
 
 // インストール
