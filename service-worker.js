@@ -8,7 +8,7 @@ const urlsToCache = [
   './sanwa_super_icon_192.png',
   './sanwa_super_icon_512.png'
 ];
-
+　
 // インストール
 self.addEventListener('install', event => {
   event.waitUntil(
