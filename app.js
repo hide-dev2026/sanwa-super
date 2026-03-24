@@ -145,6 +145,7 @@ if('serviceWorker' in navigator) {
 
 // 通知購読処理
 async function subscribeUser() {
+  console.log("subscribeUser開始");
   const registration = await navigator.serviceWorker.ready;
 
   const subscription = await registration.pushManager.subscribe({
