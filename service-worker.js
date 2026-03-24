@@ -1,12 +1,12 @@
 const CACHE_NAME = 'simple-pwa-cache-v5';
 const urlsToCache = [
-  './',
-  './index.html',
-  './style.css',
-  './app.js',
-  './manifest.json',
-  './sanwa_super_icon_192.png',
-  './sanwa_super_icon_512.png'
+  '/sanwa-super/',
+  '/sanwa-super/index.html',
+  '/sanwa-super/style.css',
+  '/sanwa-super/app.js',
+  '/sanwa-super/manifest.json',
+  '/sanwa-super/sanwa_super_icon_192.png',
+  '/sanwa-super/sanwa_super_icon_512.png'
 ];
 
 // インストール
