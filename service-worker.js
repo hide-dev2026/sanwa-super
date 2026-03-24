@@ -1,4 +1,4 @@
-const CACHE_NAME = 'simple-pwa-cache-v5';
+const CACHE_NAME = 'simple-pwa-cache-v6';
 const urlsToCache = [
   '/sanwa-super/',
   '/sanwa-super/index.html',
@@ -21,8 +21,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys => {
       return Promise.all(
-        keys.filter(key => key !== CACHE_NAME)
-            .map(key => caches.delete(key))
+        keys.map(key => caches.delete(key)) // ← 全削除に変更
       );
     })
   );
