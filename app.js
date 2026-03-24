@@ -149,13 +149,13 @@ async function subscribeUser() {
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+    applicationServerKey: vapidPublicKey
   });
 
   console.log("購読情報:", JSON.stringify(subscription));
 
-  // 後で作る GAS に送信
-  sendSubscriptionToServer(subscription);
+  // ★これが重要
+  await sendSubscriptionToServer(subscription);
 }
 
 function urlBase64ToUint8Array(base64String) {
