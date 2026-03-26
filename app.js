@@ -177,7 +177,7 @@ function urlBase64ToUint8Array(base64String) {
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
-  await fetch("https://sanwa-push.winwin-hide.workers.dev", {
+  await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
     method: "POST",
     body: JSON.stringify(subscription),
     headers: {
