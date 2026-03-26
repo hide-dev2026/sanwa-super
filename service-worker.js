@@ -32,9 +32,9 @@ self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
   // 👉 WorkerのURLはキャッシュ処理しない
-  if (url.hostname.includes('workers.dev')) {
-    return; // ← これ重要
-  }
+if (url.hostname.includes('workers.dev')) {
+  return fetch(event.request);
+}
 
   event.respondWith(
     caches.match(event.request).then(resp => {

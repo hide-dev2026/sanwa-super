@@ -150,7 +150,7 @@ async function subscribeUser() {
 
   const subscription = await registration.pushManager.subscribe({
     userVisibleOnly: true,
-    applicationServerKey: vapidPublicKey
+    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
   });
 
   console.log("購読情報:", JSON.stringify(subscription));
