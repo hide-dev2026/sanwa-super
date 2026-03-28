@@ -186,14 +186,3 @@ async function sendSubscriptionToServer(subscription) {
   });
   console.log("fetch直後");
 }
-
-// 通知ボタンと連動
-document.getElementById("notify-btn").addEventListener("click", async () => {
-  const permission = await Notification.requestPermission();
-
-  if (permission === "granted") {
-    subscribeUser();
-  } else {
-    alert("通知が許可されませんでした");
-  }
-});
