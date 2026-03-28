@@ -179,10 +179,10 @@ async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
   await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
     method: "POST",
-    body: JSON.stringify(subscription),
     headers: {
       "Content-Type": "application/json"
-    }
+    },
+    body: JSON.stringify(subscription)
   });
   console.log("fetch直後");
 }
