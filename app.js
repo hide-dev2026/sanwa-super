@@ -50,6 +50,8 @@ window.addEventListener('load', () => {
       new Notification('通知が有効になりました！', {
         body: '新着特売情報をお知らせします。',
       });
+      // 購読処理
+      await subscribeUser();
     } else {
       alert('通知が許可されませんでした');
     }
