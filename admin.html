@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>通知管理画面</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 40px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      font-size: 24px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>通知送信</h1>
+
+<label>タイトル</label> <input id="title" value="新着情報">
+
+<label>本文</label>
+
+  <textarea id="body">更新されました！</textarea>
+
+<label>APIキー</label> <input id="apiKey" placeholder="12@34Abcd">
+
+<button onclick="send()">通知送信</button>
+
+  <p id="result"></p>
+
+  <script>
+    async function send() {
+      const title = document.getElementById("title").value;
+      const body = document.getElementById("body").value;
+      const apiKey = document.getElementById("apiKey").value;
+
+      const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": apiKey
+        },
+        body: JSON.stringify({ title, body })
+      });
+
+      const text = await res.text();
+      document.getElementById("result").innerText = text;
+    }
+  </script>
+
+</body>
+</html>
