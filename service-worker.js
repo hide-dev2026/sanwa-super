@@ -33,7 +33,8 @@ self.addEventListener('fetch', event => {
 
   // 👉 WorkerのURLはキャッシュ処理しない
 if (url.hostname.includes('workers.dev')) {
-  return fetch(event.request);
+  event.respondWith(fetch(event.request));
+  return;
 }
 
   event.respondWith(
