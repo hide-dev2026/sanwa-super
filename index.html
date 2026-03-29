@@ -40,34 +40,9 @@
       </div>
     </section>
 
-    <button id="installBtn" style="display:none;">
-      📲 アプリをインストール
-    </button>
+    <button id="installBtn" style="display:none;"></button>
 
-  </div> <!-- /#home -->
-
-  <script>
-  let deferredPrompt;
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-
-    // ボタン表示
-    document.getElementById("installBtn").style.display = "block";
-  });
-
-  document.getElementById("installBtn").addEventListener("click", async () => {
-    if (!deferredPrompt) return;
-
-    deferredPrompt.prompt();
-
-    const result = await deferredPrompt.userChoice;
-    console.log(result);
-
-    deferredPrompt = null;
-  });
-  </script>
+  </div>
   
   <div id="store" class="page" style="display:none;">
     <h2>生鮮館株式会社 三和スーパー</h2>
