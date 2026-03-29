@@ -191,34 +191,35 @@ async function sendSubscriptionToServer(subscription) {
 
 let deferredPrompt = null;
 
-const installBtn = document.getElementById('installBtn');
+window.addEventListener('load', () => {
+  const installBtn = document.getElementById('installBtn');
+  if (!installBtn) return;
 
-// 最初はボタン非表示
-installBtn.style.display = 'none';
-
-// インストールイベントを捕まえる
-window.addEventListener('beforeinstallprompt', (e) => {
-  console.log('beforeinstallprompt 発火');
-
-  e.preventDefault(); // ←これが超重要
-
-  deferredPrompt = e;
-
-  // ボタン表示
-  installBtn.style.display = 'block';
-});
-
-// ボタン押したとき
-installBtn.addEventListener('click', async () => {
-  if (!deferredPrompt) return;
-
-  deferredPrompt.prompt();
-
-  const choiceResult = await deferredPrompt.userChoice;
-  console.log(choiceResult.outcome);
-
-  deferredPrompt = null;
-
-  // 押したらボタン消す
+  // 最初は非表示
   installBtn.style.display = 'none';
+
+  // インストールイベント
+  window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('beforeinstallprompt 発火');
+
+    e.preventDefault();
+
+    deferredPrompt = e;
+
+    installBtn.style.display = 'block';
+  });
+
+  // クリック時
+  installBtn.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+
+    const choiceResult = await deferredPrompt.userChoice;
+    console.log(choiceResult.outcome);
+
+    deferredPrompt = null;
+
+    installBtn.style.display = 'none';
+  });
 });
