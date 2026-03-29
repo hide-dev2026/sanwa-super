@@ -189,23 +189,36 @@ async function sendSubscriptionToServer(subscription) {
   console.log("fetch直後");
 }
 
-let deferredPrompt;
+let deferredPrompt = null;
 
+const installBtn = document.getElementById('installBtn');
+
+// 最初はボタン非表示
+installBtn.style.display = 'none';
+
+// インストールイベントを捕まえる
 window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
+  console.log('beforeinstallprompt 発火');
+
+  e.preventDefault(); // ←これが超重要
+
   deferredPrompt = e;
 
-  const btn = document.getElementById("installBtn");
-  btn.disabled = false;
+  // ボタン表示
+  installBtn.style.display = 'block';
 });
 
-document.getElementById("installBtn").addEventListener("click", async () => {
-  if (!deferredPrompt) {
-    alert("この端末ではインストールできません");
-    return;
-  }
+// ボタン押したとき
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
 
   deferredPrompt.prompt();
-  await deferredPrompt.userChoice;
+
+  const choiceResult = await deferredPrompt.userChoice;
+  console.log(choiceResult.outcome);
+
   deferredPrompt = null;
+
+  // 押したらボタン消す
+  installBtn.style.display = 'none';
 });
