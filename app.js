@@ -148,16 +148,27 @@ if('serviceWorker' in navigator) {
 // 通知購読処理
 async function subscribeUser() {
   console.log("subscribeUser開始");
+
   const registration = await navigator.serviceWorker.ready;
 
-  const subscription = await registration.pushManager.subscribe({
-    userVisibleOnly: true,
-    applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
-  });
+  let subscription;
+
+  try {
+    subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+    });
+    console.log("新規購読成功");
+  } catch (e) {
+    console.log("subscribe失敗（既に購読済みの可能性）", e);
+
+    // 👇 既存の購読を取得
+    subscription = await registration.pushManager.getSubscription();
+  }
 
   console.log("購読情報:", JSON.stringify(subscription));
 
-  // ★これが重要
+  // 👇 必ず送る
   await sendSubscriptionToServer(subscription);
 }
 
