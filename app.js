@@ -168,9 +168,14 @@ async function subscribeUser() {
 
   console.log("購読情報:", JSON.stringify(subscription));
 
-  // 👇 必ず送る
+  if (!subscription) {
+    console.log("購読情報が取得できていません");
+    return;
+  }
+
+  // 👇 これが実行されるのは subscription がある時だけ
   await sendSubscriptionToServer(subscription);
-}
+  console.log("subscribeUser終了");}
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
@@ -190,13 +195,23 @@ function urlBase64ToUint8Array(base64String) {
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
-  await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(subscription)
-  });
+
+  try {
+    const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(subscription)
+    });
+
+    const text = await res.text();
+    console.log("サーバー応答:", text);
+
+  } catch (e) {
+    console.error("fetchエラー:", e);
+  }
+
   console.log("fetch直後");
 }
 
