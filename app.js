@@ -33,8 +33,15 @@ function showPage(pageId) {
 // ========================================
 // DOM のロード後にボタンを取得し、イベントを設定する。
 window.addEventListener('load', () => {
+  alert("① loadイベント発火");
+
   const notifyBtn = document.getElementById('notify-btn');
-  if (!notifyBtn) return; // 念のため存在確認
+  
+  // 念のため存在確認
+  if (!notifyBtn) {
+    alert("② notify-btn が見つからない");
+    return;
+  }
 
   notifyBtn.addEventListener('click', async () => {
     if (!('Notification' in window)) {
