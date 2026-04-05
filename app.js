@@ -62,10 +62,12 @@ window.addEventListener('load', () => {
     alert("⑤ 許可結果: " + permission);
 
     if (permission === 'granted') {
-      new Notification('通知が有効になりました！', {
-        body: '新着特売情報をお知らせします。',
-      });
-      // 購読処理
+        // ❌ これ一旦コメントアウト
+        // new Notification('通知が有効になりました！', {
+        //   body: '新着特売情報をお知らせします。',
+        // });
+        
+        // 購読処理
       await subscribeUser();
     } else {
       alert('通知が許可されませんでした');
