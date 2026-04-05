@@ -148,6 +148,7 @@ if('serviceWorker' in navigator) {
 // 通知購読処理
 async function subscribeUser() {
   console.log("subscribeUser開始");
+  alert("① subscribeUser開始");
 
   const registration = await navigator.serviceWorker.ready;
 
@@ -167,6 +168,7 @@ async function subscribeUser() {
   }
 
   console.log("購読情報:", JSON.stringify(subscription));
+  alert("② 購読情報: " + JSON.stringify(subscription));
 
   if (!subscription) {
     console.log("購読情報が取得できていません");
@@ -196,6 +198,7 @@ function urlBase64ToUint8Array(base64String) {
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
+  alert("③ fetch直前");
 
   try {
     const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
