@@ -50,6 +50,6 @@ self.addEventListener("push", event => {
 
   self.registration.showNotification(data.title || "新しい通知", {
     body: data.body || "内容がありません",
-    icon: "/sanwa_super_icon_192.png" // 実際のパスに合わせて変更
+    icon: "/sanwa-super/sanwa_super_icon_192.png"
   });
 });
