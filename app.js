@@ -44,6 +44,8 @@ window.addEventListener('load', () => {
   }
 
   notifyBtn.addEventListener('click', async () => {
+    alert("④ ボタンが押された");
+    
     if (!('Notification' in window)) {
       alert('このブラウザは通知に対応していません');
       return;
