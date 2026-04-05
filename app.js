@@ -1,4 +1,4 @@
-alert("JS読み込まれた");
+alert("JS読み込まれたよ");
 
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
@@ -36,7 +36,7 @@ window.addEventListener('load', () => {
   alert("① loadイベント発火");
 
   const notifyBtn = document.getElementById('notify-btn');
-  
+
   // 念のため存在確認
   if (!notifyBtn) {
     alert("② notify-btn が見つからない");
