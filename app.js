@@ -1,5 +1,3 @@
-alert("JS読み込まれたぜ");
-
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
 // ========================================
@@ -9,7 +7,6 @@ const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT9
 // ヘッダタイトルの書き換えもここで行う。
 // ========================================
 function showPage(pageId) {
-  alert("テスト");
   const pages = document.querySelectorAll('.page');
   pages.forEach(p => p.style.display = 'none');
 
@@ -33,21 +30,15 @@ function showPage(pageId) {
 // ========================================
 // DOM のロード後にボタンを取得し、イベントを設定する。
 window.addEventListener('load', () => {
-  alert("① loadイベント発火");
-
   const notifyBtn = document.getElementById('notify-btn');
 
   // 念のため存在確認
   if (!notifyBtn) {
-    alert("② notify-btn が見つからない");
     return;
   }
 
   notifyBtn.addEventListener('click', async () => {
-    alert("④ ボタンが押された");
-
     if (!('Notification' in window)) {
-      alert('このブラウザは通知に対応していません');
       return;
     }
 
@@ -59,22 +50,17 @@ window.addEventListener('load', () => {
 
     const permission = await Notification.requestPermission();
 
-    alert("⑤ 許可結果: " + permission);
-
     if (permission === 'granted') {
       try {
         new Notification('通知が有効になりました！', {
           body: '新着特売情報をお知らせします。',
         });
       } catch (e) {
-        alert("Notificationエラー: " + e);
       }
 
       // 購読処理
       await subscribeUser();
-    } else {
-      alert('通知が許可されませんでした');
-    }
+    } 
   });
 });
 
@@ -167,8 +153,6 @@ if('serviceWorker' in navigator) {
 
 // 通知購読処理
 async function subscribeUser() {
-  alert("⑥ subscribeUser開始"); 
-
   console.log("subscribeUser開始");
 
   const registration = await navigator.serviceWorker.ready;
@@ -189,14 +173,12 @@ async function subscribeUser() {
   }
 
   console.log("購読情報:", JSON.stringify(subscription));
-  alert("② 購読情報: " + JSON.stringify(subscription));
 
   if (!subscription) {
     console.log("購読情報が取得できていません");
     return;
   }
 
-  // 👇 これが実行されるのは subscription がある時だけ
   await sendSubscriptionToServer(subscription);
   console.log("subscribeUser終了");
 }
@@ -219,7 +201,6 @@ function urlBase64ToUint8Array(base64String) {
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
-  alert("⑧ fetch直前");
 
   try {
     const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
