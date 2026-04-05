@@ -1,3 +1,5 @@
+alert("JS読み込まれた");
+
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
 // ========================================
@@ -7,6 +9,7 @@ const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT9
 // ヘッダタイトルの書き換えもここで行う。
 // ========================================
 function showPage(pageId) {
+  alert("テスト");
   const pages = document.querySelectorAll('.page');
   pages.forEach(p => p.style.display = 'none');
 
