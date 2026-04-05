@@ -1,4 +1,4 @@
-alert("JS読み込まれた");
+alert("JS読み込まれたぜ");
 
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
@@ -62,12 +62,15 @@ window.addEventListener('load', () => {
     alert("⑤ 許可結果: " + permission);
 
     if (permission === 'granted') {
-        // ❌ これ一旦コメントアウト
-        // new Notification('通知が有効になりました！', {
-        //   body: '新着特売情報をお知らせします。',
-        // });
-        
-        // 購読処理
+      try {
+        new Notification('通知が有効になりました！', {
+          body: '新着特売情報をお知らせします。',
+        });
+      } catch (e) {
+        alert("Notificationエラー: " + e);
+      }
+
+      // 購読処理
       await subscribeUser();
     } else {
       alert('通知が許可されませんでした');
