@@ -45,7 +45,7 @@ window.addEventListener('load', () => {
 
   notifyBtn.addEventListener('click', async () => {
     alert("④ ボタンが押された");
-    
+
     if (!('Notification' in window)) {
       alert('このブラウザは通知に対応していません');
       return;
@@ -58,6 +58,9 @@ window.addEventListener('load', () => {
     }
 
     const permission = await Notification.requestPermission();
+
+    alert("⑤ 許可結果: " + permission);
+
     if (permission === 'granted') {
       new Notification('通知が有効になりました！', {
         body: '新着特売情報をお知らせします。',
@@ -159,8 +162,9 @@ if('serviceWorker' in navigator) {
 
 // 通知購読処理
 async function subscribeUser() {
+  alert("⑥ subscribeUser開始"); 
+
   console.log("subscribeUser開始");
-  alert("① subscribeUser開始");
 
   const registration = await navigator.serviceWorker.ready;
 
@@ -210,7 +214,7 @@ function urlBase64ToUint8Array(base64String) {
 // GAS に購読情報を送信（仮）
 async function sendSubscriptionToServer(subscription) {
   console.log("fetch直前");
-  alert("③ fetch直前");
+  alert("⑧ fetch直前");
 
   try {
     const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
