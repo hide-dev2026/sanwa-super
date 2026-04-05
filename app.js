@@ -175,7 +175,8 @@ async function subscribeUser() {
 
   // 👇 これが実行されるのは subscription がある時だけ
   await sendSubscriptionToServer(subscription);
-  console.log("subscribeUser終了");}
+  console.log("subscribeUser終了");
+}
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
