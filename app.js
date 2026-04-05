@@ -1,4 +1,4 @@
-alert("JS読み込まれたよ");
+alert("JS読み込まれた");
 
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
