@@ -43,23 +43,43 @@
 
     // ★ 通知送信処理
     async function send() {
-      const title = document.getElementById("title").value;
-      const body = document.getElementById("body").value;
+      const resultEl = document.getElementById("result");
+      resultEl.innerText = "送信中...";
+      
+      try {
+        const title = document.getElementById("title").value;
+        const body = document.getElementById("body").value;
 
-      // Firestore からトークン取得
-      const tokenDoc = await getDoc(doc(db, "tokens", "user1"));
-      if (!tokenDoc.exists()) {
-        document.getElementById("result").innerText = "トークンが見つかりません";
-        return;
+        if (!title || !body) {
+          resultEl.innerText = "エラー：タイトルと本文を入力してください";
+          resultEl.style.color = "red";
+          return;
+        }
+
+        // Firestore からトークン取得
+        const tokenDoc = await getDoc(doc(db, "tokens", "user1"));
+        if (!tokenDoc.exists()) {
+          resultEl.innerText = "エラー：トークンが見つかりません（スマホで通知設定ボタンを押してください）";
+          resultEl.style.color = "red";
+          console.error("トークンが見つかりません");
+          return;
+        }
+
+        const token = tokenDoc.data().token;
+        console.log("取得したトークン:", token);
+
+        // Firebase Functions の呼び出し
+        const sendNotification = httpsCallable(functions, "sendNotification");
+        const response = await sendNotification({ token, title, body });
+
+        console.log("送信成功:", response);
+        resultEl.innerText = "✓ 送信しました";
+        resultEl.style.color = "green";
+      } catch (error) {
+        console.error("送信エラー:", error);
+        resultEl.innerText = `エラー: ${error.message}`;
+        resultEl.style.color = "red";
       }
-
-      const token = tokenDoc.data().token;
-
-      // Firebase Functions の呼び出し
-      const sendNotification = httpsCallable(functions, "sendNotification");
-      await sendNotification({ token, title, body });
-
-      document.getElementById("result").innerText = "送信しました";
     }
 
     // グローバルに公開（button onclick 用）
