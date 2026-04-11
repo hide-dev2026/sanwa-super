@@ -20,12 +20,10 @@
 
   <!-- Firebase SDK -->
   <script type="module">
-    // Firebase SDK 読み込み
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
 
-    // ★ あなたの Firebase 設定（app.js と同じ）
+    // Firebase 設定
     const firebaseConfig = {
       apiKey: "AIzaSyBywl9QQ14GJ9zr3AljSF5IN9nIumj5aMk",
       authDomain: "sanwa-super.firebaseapp.com",
@@ -36,16 +34,16 @@
       measurementId: "G-HFYX2R00SF"
     };
 
-    // Firebase 初期化
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
-    const functions = getFunctions(app);
 
-    // ★ 通知送信処理
+    // ★ Cloudflare Workers の URL をここに入れる
+    const WORKER_URL = "https://sanwa-push.winwin-hide.workers.dev/";
+
     async function send() {
       const resultEl = document.getElementById("result");
       resultEl.innerText = "送信中...";
-      
+
       try {
         const title = document.getElementById("title").value;
         const body = document.getElementById("body").value;
@@ -61,20 +59,34 @@
         if (!tokenDoc.exists()) {
           resultEl.innerText = "エラー：トークンが見つかりません（スマホで通知設定ボタンを押してください）";
           resultEl.style.color = "red";
-          console.error("トークンが見つかりません");
           return;
         }
 
         const token = tokenDoc.data().token;
         console.log("取得したトークン:", token);
 
-        // Firebase Functions の呼び出し
-        const sendNotification = httpsCallable(functions, "sendNotification");
-        const response = await sendNotification({ token, title, body });
+        // ★ Cloudflare Workers に送信
+        const response = await fetch(WORKER_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            title: title,
+            body: body,
+            tokens: [token]   // ← 配列で送る
+          })
+        });
 
-        console.log("送信成功:", response);
-        resultEl.innerText = "✓ 送信しました";
-        resultEl.style.color = "green";
+        const text = await response.text();
+        console.log("Workers の応答:", text);
+
+        if (response.ok) {
+          resultEl.innerText = "✓ 送信しました";
+          resultEl.style.color = "green";
+        } else {
+          resultEl.innerText = "エラー：" + text;
+          resultEl.style.color = "red";
+        }
+
       } catch (error) {
         console.error("送信エラー:", error);
         resultEl.innerText = `エラー: ${error.message}`;
@@ -82,7 +94,6 @@
       }
     }
 
-    // グローバルに公開（button onclick 用）
     window.send = send;
   </script>
 </body>
