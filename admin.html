@@ -1,65 +1,69 @@
 <!DOCTYPE html>
-
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>通知管理画面</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      padding: 40px;
-      max-width: 600px;
-      margin: auto;
-    }
-    h1 {
-      font-size: 24px;
-    }
-    input, textarea, button {
-      width: 100%;
-      margin-top: 10px;
-      padding: 10px;
-      font-size: 16px;
-    }
-    button {
-      cursor: pointer;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>管理画面 - Push通知送信</title>
 </head>
 <body>
+  <h1>Push通知送信</h1>
 
-  <h1>通知送信</h1>
+  <label>タイトル：</label>
+  <input id="title" type="text"><br><br>
 
-<label>タイトル</label> <input id="title" value="新着情報">
+  <label>本文：</label>
+  <input id="body" type="text"><br><br>
 
-<label>本文</label>
-
-  <textarea id="body">更新されました！</textarea>
-
-<label>APIキー</label> <input id="apiKey" placeholder="12@34Abcd">
-
-<button onclick="send()">通知送信</button>
+  <button onclick="send()">送信</button>
 
   <p id="result"></p>
 
-  <script>
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Firebase SDK 読み込み
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-functions.js";
+
+    // ★ あなたの Firebase 設定（app.js と同じ）
+    const firebaseConfig = {
+      apiKey: "AIzaSyBywl9QQ14GJ9zr3AljSF5IN9nIumj5aMk",
+      authDomain: "sanwa-super.firebaseapp.com",
+      projectId: "sanwa-super",
+      storageBucket: "sanwa-super.firebasestorage.app",
+      messagingSenderId: "826299375113",
+      appId: "1:826299375113:web:8fd733d62dcc1def4ba2d8",
+      measurementId: "G-HFYX2R00SF"
+    };
+
+    // Firebase 初期化
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const functions = getFunctions(app);
+
+    // ★ 通知送信処理
     async function send() {
       const title = document.getElementById("title").value;
       const body = document.getElementById("body").value;
-      const apiKey = document.getElementById("apiKey").value;
 
-      const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/send", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": apiKey
-        },
-        body: JSON.stringify({ title, body })
-      });
+      // Firestore からトークン取得
+      const tokenDoc = await getDoc(doc(db, "tokens", "user1"));
+      if (!tokenDoc.exists()) {
+        document.getElementById("result").innerText = "トークンが見つかりません";
+        return;
+      }
 
-      const text = await res.text();
-      document.getElementById("result").innerText = text;
+      const token = tokenDoc.data().token;
+
+      // Firebase Functions の呼び出し
+      const sendNotification = httpsCallable(functions, "sendNotification");
+      await sendNotification({ token, title, body });
+
+      document.getElementById("result").innerText = "送信しました";
     }
-  </script>
 
+    // グローバルに公開（button onclick 用）
+    window.send = send;
+  </script>
 </body>
 </html>
