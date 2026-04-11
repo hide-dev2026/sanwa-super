@@ -1,22 +1,34 @@
 const vapidPublicKey = "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM";
 
 // ========================================
+// Firebase 初期化
+// ========================================
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBywl9QQ14GJ9zr3AljSF5IN9nIumj5aMk",
+  authDomain: "sanwa-super.firebaseapp.com",
+  projectId: "sanwa-super",
+  storageBucket: "sanwa-super.firebasestorage.app",
+  messagingSenderId: "826299375113",
+  appId: "1:826299375113:web:8fd733d62dcc1def4ba2d8",
+  measurementId: "G-HFYX2R00SF"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ========================================
 // ページ表示制御
-// showPage() は id を受け取り対象の .page を表示、他は非表示にする。
-// 以前は "product" 詳細ページがあったが現在は使わないため該当処理を削除。
-// ヘッダタイトルの書き換えもここで行う。
 // ========================================
 function showPage(pageId) {
   const pages = document.querySelectorAll('.page');
   pages.forEach(p => p.style.display = 'none');
 
-  // 指定されたページ要素があれば表示
   const target = document.getElementById(pageId);
-  if (target) {
-    target.style.display = 'block';
-  }
+  if (target) target.style.display = 'block';
 
-  // ヘッダタイトル更新
   const header = document.getElementById('header-title');
   if (pageId === 'home') {
     header.textContent = '生鮮館　三和スーパー';
@@ -28,21 +40,13 @@ function showPage(pageId) {
 // ========================================
 // プッシュ通知の初期化
 // ========================================
-// DOM のロード後にボタンを取得し、イベントを設定する。
 window.addEventListener('load', () => {
   const notifyBtn = document.getElementById('notify-btn');
-
-  // 念のため存在確認
-  if (!notifyBtn) {
-    return;
-  }
+  if (!notifyBtn) return;
 
   notifyBtn.addEventListener('click', async () => {
-    if (!('Notification' in window)) {
-      return;
-    }
+    if (!('Notification' in window)) return;
 
-    // すでに拒否されている場合は再リクエストできない
     if (Notification.permission === 'denied') {
       alert('通知は既に拒否されています。ブラウザの設定をご確認ください。');
       return;
@@ -55,17 +59,15 @@ window.addEventListener('load', () => {
         new Notification('通知が有効になりました！', {
           body: '新着特売情報をお知らせします。',
         });
-      } catch (e) {
-      }
+      } catch (e) {}
 
-      // 購読処理
       await subscribeUser();
-    } 
+    }
   });
 });
 
 // ========================================
-// Google Sheets から CSV を取得し DOM に反映するヘルパー
+// Google Sheets CSV 読み込み
 // ========================================
 async function fetchCSV(url) {
   const res = await fetch(url);
@@ -131,7 +133,6 @@ async function loadProducts() {
   }
 }
 
-// ページロード時にデータを読み込む
 window.addEventListener('load', () => {
   loadSales();
   loadNotices();
@@ -139,19 +140,19 @@ window.addEventListener('load', () => {
 });
 
 // ========================================
-// PWA 機能の初期化
-// ページ読み込み時に service-worker.js を登録し、
-// オフライン対応やプッシュの受信ができるようにする。
+// Service Worker 登録
 // ========================================
-if('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-  navigator.serviceWorker.register('/sanwa-super/service-worker.js')
+    navigator.serviceWorker.register('/sanwa-super/service-worker.js')
       .then(() => console.log('Service Worker登録成功'))
       .catch(err => console.log('Service Worker登録失敗', err));
   });
 }
 
+// ========================================
 // 通知購読処理
+// ========================================
 async function subscribeUser() {
   console.log("subscribeUser開始");
 
@@ -167,8 +168,6 @@ async function subscribeUser() {
     console.log("新規購読成功");
   } catch (e) {
     console.log("subscribe失敗（既に購読済みの可能性）", e);
-
-    // 👇 既存の購読を取得
     subscription = await registration.pushManager.getSubscription();
   }
 
@@ -198,50 +197,46 @@ function urlBase64ToUint8Array(base64String) {
   return outputArray;
 }
 
-// GAS に購読情報を送信（仮）
+// ========================================
+// ★ Cloudflare → Firestore 保存に変更
+// ========================================
 async function sendSubscriptionToServer(subscription) {
-  console.log("fetch直前");
+  console.log("Firestore にトークン保存開始");
+
+  const token = subscription.endpoint;
 
   try {
-    const res = await fetch("https://sanwa-push.winwin-hide.workers.dev/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(subscription)
+    await setDoc(doc(db, "tokens", "user1"), {
+      token: token,
+      updatedAt: new Date()
     });
 
-    const text = await res.text();
-    console.log("サーバー応答:", text);
-
+    console.log("Firestore 保存成功");
   } catch (e) {
-    console.error("fetchエラー:", e);
+    console.error("Firestore 保存エラー:", e);
   }
-
-  console.log("fetch直後");
 }
 
+// ========================================
+// PWA インストール処理
+// ========================================
 let deferredPrompt = null;
 
 window.addEventListener('load', () => {
   const installBtn = document.getElementById('installBtn');
   if (!installBtn) return;
 
-  // 最初は非表示
   installBtn.style.display = 'none';
 
-  // インストールイベント
   window.addEventListener('beforeinstallprompt', (e) => {
     console.log('beforeinstallprompt 発火');
 
     e.preventDefault();
-
     deferredPrompt = e;
 
     installBtn.style.display = 'block';
   });
 
-  // クリック時
   installBtn.addEventListener('click', async () => {
     if (!deferredPrompt) return;
 
@@ -251,7 +246,6 @@ window.addEventListener('load', () => {
     console.log(choiceResult.outcome);
 
     deferredPrompt = null;
-
     installBtn.style.display = 'none';
   });
 });
