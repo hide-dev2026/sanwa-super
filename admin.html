@@ -38,7 +38,7 @@
     const db = getFirestore(app);
 
     // ★ Cloudflare Workers の URL をここに入れる
-    const WORKER_URL = "https://sanwa-push.winwin-hide.workers.dev/";
+    const WORKER_URL = "https://sanwa-push.winwin-hide.workers.dev/production";
 
     async function send() {
       const resultEl = document.getElementById("result");
