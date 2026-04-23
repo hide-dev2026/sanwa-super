@@ -8,7 +8,7 @@
 <body>
   <h1>Push通知送信</h1>
 
-  <label>タイトルだよ：</label>
+  <label>タイトル：</label>
   <input id="title" type="text"><br><br>
 
   <label>本文：</label>
@@ -18,27 +18,9 @@
 
   <p id="result"></p>
 
-  <!-- Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // Firebase 設定
-    const firebaseConfig = {
-      apiKey: "AIzaSyBywl9QQ14GJ9zr3AljSF5IN9nIumj5aMk",
-      authDomain: "sanwa-super.firebaseapp.com",
-      projectId: "sanwa-super",
-      storageBucket: "sanwa-super.firebasestorage.app",
-      messagingSenderId: "826299375113",
-      appId: "1:826299375113:web:8fd733d62dcc1def4ba2d8",
-      measurementId: "G-HFYX2R00SF"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // ★ Cloudflare Workers の URL をここに入れる
-    const WORKER_URL = "https://sanwa-super-push.winwin-hide.workers.dev";
+  <script>
+    // ★ 通知送信サーバーの URL をここに設定
+    const PUSH_SEND_URL = "https://example.com/your-push-endpoint";
 
     async function send() {
       const resultEl = document.getElementById("result");
@@ -54,36 +36,25 @@
           return;
         }
 
-        // Firestore からトークン取得
-        const tokenDoc = await getDoc(doc(db, "tokens", "user1"));
-        if (!tokenDoc.exists()) {
-          resultEl.innerText = "エラー：トークンが見つかりません（スマホで通知設定ボタンを押してください）";
-          resultEl.style.color = "red";
-          return;
-        }
-
-        const token = tokenDoc.data().token;
-        console.log("取得したトークン:", token);
-
-        // ★ Cloudflare Workers に送信
-        const response = await fetch(WORKER_URL, {
+        const response = await fetch(PUSH_SEND_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: title,
-            body: body,
-            tokens: [token]   // ← 配列で送る
+            body: body
           })
         });
 
-        const text = await response.text();
-        console.log("Workers の応答:", text);
+        const result = await response.json();
+        console.log("通知送信サーバー応答:", result);
 
-        if (response.ok) {
-          resultEl.innerText = "✓ 送信しました";
+        if (response.ok && result.success) {
+          resultEl.innerText = `✓ 送信完了`;
           resultEl.style.color = "green";
+          document.getElementById("title").value = "";
+          document.getElementById("body").value = "";
         } else {
-          resultEl.innerText = "エラー：" + text;
+          resultEl.innerText = "エラー：" + (result.message || response.statusText);
           resultEl.style.color = "red";
         }
 
