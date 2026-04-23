@@ -1,7 +1,7 @@
 // ========================================
 // Web Push 初期化（購読情報をGASで管理）
 // ========================================
-const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzMKQ3uRCX6_fgYmZIoAf_85yrOg8B19q5KDxthEuhtPLN5Fm1RIvKiW01HYd4x6xGS-w/exec";
+const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzNp1SYQRKtK2sg8qpv32qf9_7p9afKfv0L7fN0Rak2cnpJyXWbfmo85JP-qjMzN0o_oA/exec";
 
 // ========================================
 // プッシュ通知 初期化
