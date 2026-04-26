@@ -81,4 +81,8 @@ self.addEventListener("push", event => {
     })
   );
 
+  if (url.hostname.includes('docs.google.com')) {
+  event.respondWith(fetch(event.request));
+  return;
+}
 });

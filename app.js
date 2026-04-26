@@ -1,134 +1,119 @@
 // ========================================
-// 📊 データ取得設定
+// 📊 Google Sheets CSV URL
 // ========================================
-const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwT9gz0cxYNIbxcBgtzNGb_gNeqS_kUEEPYsLwKIW6vvms5cJSDvmnwDpqBddcqcRFo/exec";
+const SALES_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=0";
+const NEWS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=1022873183";
+const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9k26KOgoYlZVxD10aPFRiA9_EwD9afFjHHoQiNv0aX1La99VGHRRhMqXVfJKCoJWgEsgiBkFu5/pub?output=csv&gid=142758616";
 
 // ========================================
-// 🌐 データ取得と表示
+// 🔔 GAS（購読保存用）
 // ========================================
-function loadData() {
-  console.log("📥 データ取得開始...");
+const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzNayaMoZRjMtW0flA4UlWCfY6N3A9pIhcnfYfGGDmkS8LdAlvfYtaaNCLA_r_Btvyw/exec";
 
-  const callbackName = "handleData";
-
-  window[callbackName] = function(result) {
-    console.log("📊 データ:", result);
-
-    if (result.success && result.data) {
-      displaySale(result.data.sale || []);
-      displayNews(result.data.news || []);
-      displayProducts(result.data.products || []);
-    } else {
-      console.log("❌ エラー:", result.message);
-    }
-  };
-
-  const script = document.createElement("script");
-  script.src = `${DATA_GAS_URL}?action=sale&callback=${callbackName}`;
-
-  document.body.appendChild(script);
+// ========================================
+// 📥 CSV取得
+// ========================================
+async function fetchCSV(url) {
+  const res = await fetch(url);
+  const text = await res.text();
+  return text.trim().split("\n").map(line => line.split(","));
 }
 
 // ========================================
-// 特売情報を表示
+// 🛒 特売情報
 // ========================================
-function displaySale(items) {
-  const container = document.getElementById("sales-list");
-  if (!container) return;
+async function loadSales() {
+  try {
+    const rows = await fetchCSV(SALES_CSV_URL);
+    const container = document.getElementById("sales-list");
+    container.innerHTML = "";
 
-  container.innerHTML = "";
-  if (!items || items.length === 0) {
-    container.innerHTML = "<p>特売情報はありません</p>";
-    return;
+    rows.slice(1).forEach(r => {
+      const [name, price] = r;
+      const div = document.createElement("div");
+      div.className = "sale-item";
+      div.innerHTML = `
+        <h3>${name}</h3>
+        <p class="price">${price}</p>
+      `;
+      container.appendChild(div);
+    });
+  } catch (e) {
+    console.error("特売取得エラー:", e);
   }
-
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "sale-item";
-    div.innerHTML = `
-      <h3>${item.商品名 || item.title || ""}</h3>
-      <p class="price">${item.価格 || item.price || ""}</p>
-      <p class="description">${item.説明 || item.description || ""}</p>
-    `;
-    container.appendChild(div);
-  });
 }
 
 // ========================================
-// お知らせを表示
+// 📢 お知らせ
 // ========================================
-function displayNews(items) {
-  const container = document.getElementById("notice-list");
-  if (!container) return;
+async function loadNotices() {
+  try {
+    const rows = await fetchCSV(NEWS_CSV_URL);
+    const container = document.getElementById("notice-list");
+    container.innerHTML = "";
 
-  container.innerHTML = "";
-  if (!items || items.length === 0) {
-    container.innerHTML = "<p>お知らせはありません</p>";
-    return;
+    rows.slice(1).forEach(r => {
+      const p = document.createElement("p");
+      p.textContent = r.join(" ");
+      container.appendChild(p);
+    });
+  } catch (e) {
+    console.error("お知らせ取得エラー:", e);
   }
-
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "notice-item";
-    div.innerHTML = `
-      <h3>${item.タイトル || item.title || ""}</h3>
-      <p>${item.内容 || item.content || ""}</p>
-    `;
-    container.appendChild(div);
-  });
 }
 
 // ========================================
-// 商品情報を表示
+// 📦 商品情報
 // ========================================
-function displayProducts(items) {
-  const container = document.getElementById("product-list");
-  if (!container) return;
+async function loadProducts() {
+  try {
+    const rows = await fetchCSV(PRODUCTS_CSV_URL);
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
 
-  container.innerHTML = "";
-  if (!items || items.length === 0) {
-    container.innerHTML = "<p>商品情報は 없습니다</p>";
-    return;
+    rows.slice(1).forEach(r => {
+      const [name, price, img] = r;
+
+      const card = document.createElement("div");
+      card.className = "product-item";
+
+      if (img) {
+        const imgEl = document.createElement("img");
+        imgEl.src = img;
+        imgEl.alt = name;
+        card.appendChild(imgEl);
+      }
+
+      const title = document.createElement("h3");
+      title.textContent = name;
+
+      const p = document.createElement("p");
+      p.textContent = price;
+
+      card.appendChild(title);
+      card.appendChild(p);
+
+      container.appendChild(card);
+    });
+  } catch (e) {
+    console.error("商品取得エラー:", e);
   }
-
-  items.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "product-item";
-    div.innerHTML = `
-      <h3>${item.商品名 || item.name || ""}</h3>
-      <p class="price">${item.価格 || item.price || ""}</p>
-      <p>${item.説明 || item.description || ""}</p>
-    `;
-    container.appendChild(div);
-  });
 }
 
-// ページ読み込み時にデータ取得
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🔄 ページ読み込み完了");
-  loadData();
-});
-
 // ========================================
-// ページ切り替え
+// 📄 ページ切り替え
 // ========================================
 function showPage(pageId) {
   document.querySelectorAll(".page").forEach(page => {
     page.style.display = "none";
   });
+
   const target = document.getElementById(pageId);
-  if (target) {
-    target.style.display = "block";
-  }
+  if (target) target.style.display = "block";
 }
 
 // ========================================
-// Web Push 初期化（購読情報をGASで管理）
-// ========================================
-const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzNayaMoZRjMtW0flA4UlWCfY6N3A9pIhcnfYfGGDmkS8LdAlvfYtaaNCLA_r_Btvyw/exec";
-
-// ========================================
-// プッシュ通知 初期化
+// 🔔 Push通知登録
 // ========================================
 async function initPush() {
   try {
@@ -139,75 +124,80 @@ async function initPush() {
       return;
     }
 
-    // ★ Service Worker 登録確認
     const registration = await navigator.serviceWorker.ready;
-    console.log("✓ Service Worker 登録済み");
 
-    // ★ 購読情報を取得
     let subscription = await registration.pushManager.getSubscription();
 
     if (!subscription) {
-      console.log("📱 新規購読情報を生成中...");
       subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array("BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM")
       });
     }
 
-    console.log("🔥 購読情報:", subscription);
-
-    // ★ GAS API に購読情報を送信
-    const response = await fetch(GAS_DEPLOY_URL, {
+    // GASへ送信
+    const res = await fetch(GAS_DEPLOY_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({
         action: "subscribe",
         subscription: subscription
       })
     });
 
-    const result = await response.json();
-    console.log("GAS レスポンス:", result);
+    const result = await res.json();
 
     if (result.success) {
       alert("通知設定が完了しました");
     } else {
-      alert("エラー: " + result.message);
+      alert("エラー：" + result.message);
     }
 
   } catch (err) {
-    console.error("❌ エラー:", err);
-    alert("エラーが発生しました: " + err.message);
+    console.error("Pushエラー:", err);
   }
 }
 
-// ★ VAPID キー用のヘルパー関数
+// ========================================
+// 🔑 VAPIDキー変換
+// ========================================
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding)
     .replace(/\-/g, '+')
     .replace(/_/g, '/');
+
   const rawData = window.atob(base64);
-  return new Uint8Array([...rawData].map(char => char.charCodeAt(0)));
+  return new Uint8Array([...rawData].map(c => c.charCodeAt(0)));
 }
 
-// ボタン押したら通知許可
-window.addEventListener('load', () => {
-  const notifyBtn = document.getElementById('notify-btn');
-  if (!notifyBtn) return;
+// ========================================
+// 🚀 初期処理
+// ========================================
+window.addEventListener("load", () => {
+  console.log("ページ読み込み");
 
-  notifyBtn.addEventListener('click', () => {
-    initPush();
-  });
+  // データ表示
+  loadSales();
+  loadNotices();
+  loadProducts();
+
+  // 通知ボタン
+  const btn = document.getElementById("notify-btn");
+  if (btn) {
+    btn.addEventListener("click", initPush);
+  }
 });
 
 // ========================================
-// PWA Service Worker登録
+// 🧱 Service Worker登録
 // ========================================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sanwa-super/service-worker.js')
-      .then(() => console.log('Service Worker登録成功'))
-      .catch(err => console.log('Service Worker登録失敗', err));
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sanwa-super/service-worker.js")
+      .then(() => console.log("Service Worker登録成功"))
+      .catch(err => console.log("Service Worker登録失敗", err));
   });
 }
