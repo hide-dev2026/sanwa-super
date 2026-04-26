@@ -10,7 +10,9 @@ async function loadData() {
   try {
     console.log("📥 データ取得開始...");
     
-    const response = await fetch(DATA_GAS_URL + "?action=sale");
+    const response = await fetch(DATA_GAS_URL + "?action=sale", {
+      redirect: "follow"
+    });
     console.log("📬 レスポンス:", response.status);
     
     const result = await response.json();
