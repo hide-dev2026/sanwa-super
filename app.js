@@ -8,16 +8,23 @@ const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwwoDYIGjBY0bohpIS
 // ========================================
 async function loadData() {
   try {
+    console.log("📥 データ取得開始...");
+    
     const response = await fetch(DATA_GAS_URL + "?action=sale");
+    console.log("📬 レスポンス:", response.status);
+    
     const result = await response.json();
+    console.log("📊 データ:", result);
 
     if (result.success && result.data) {
       displaySale(result.data.sale || []);
       displayNews(result.data.news || []);
       displayProducts(result.data.products || []);
+    } else {
+      console.log("❌ エラー:", result.message);
     }
   } catch (err) {
-    console.error("データ取得エラー:", err);
+    console.error("❌ データ取得エラー:", err);
   }
 }
 
