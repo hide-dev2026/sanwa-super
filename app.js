@@ -1,4 +1,106 @@
 // ========================================
+// 📊 データ取得設定
+// ========================================
+const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwwoDYIGjBY0bohpISePnho2tzOlC8WXa6Z_iQMSZ4yQvbdLYv9KDvmzmDWEhWsUMM4/exec";
+
+// ========================================
+// 🌐 データ取得と表示
+// ========================================
+async function loadData() {
+  try {
+    const response = await fetch(DATA_GAS_URL + "?action=sale");
+    const result = await response.json();
+
+    if (result.success && result.data) {
+      displaySale(result.data.sale || []);
+      displayNews(result.data.news || []);
+      displayProducts(result.data.products || []);
+    }
+  } catch (err) {
+    console.error("データ取得エラー:", err);
+  }
+}
+
+// ========================================
+// 特売情報を表示
+// ========================================
+function displaySale(items) {
+  const container = document.getElementById("sales-list");
+  if (!container) return;
+
+  container.innerHTML = "";
+  if (!items || items.length === 0) {
+    container.innerHTML = "<p>特売情報はありません</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "sale-item";
+    div.innerHTML = `
+      <h3>${item.商品名 || item.title || ""}</h3>
+      <p class="price">${item.価格 || item.price || ""}</p>
+      <p class="description">${item.説明 || item.description || ""}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ========================================
+// お知らせを表示
+// ========================================
+function displayNews(items) {
+  const container = document.getElementById("notice-list");
+  if (!container) return;
+
+  container.innerHTML = "";
+  if (!items || items.length === 0) {
+    container.innerHTML = "<p>お知らせはありません</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "notice-item";
+    div.innerHTML = `
+      <h3>${item.タイトル || item.title || ""}</h3>
+      <p>${item.内容 || item.content || ""}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ========================================
+// 商品情報を表示
+// ========================================
+function displayProducts(items) {
+  const container = document.getElementById("product-list");
+  if (!container) return;
+
+  container.innerHTML = "";
+  if (!items || items.length === 0) {
+    container.innerHTML = "<p>商品情報は 없습니다</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "product-item";
+    div.innerHTML = `
+      <h3>${item.商品名 || item.name || ""}</h3>
+      <p class="price">${item.価格 || item.price || ""}</p>
+      <p>${item.説明 || item.description || ""}</p>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ページ読み込み時にデータ取得
+window.addEventListener("load", () => {
+  loadData();
+});
+
+// ========================================
 // Web Push 初期化（購読情報をGASで管理）
 // ========================================
 const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzNayaMoZRjMtW0flA4UlWCfY6N3A9pIhcnfYfGGDmkS8LdAlvfYtaaNCLA_r_Btvyw/exec";
