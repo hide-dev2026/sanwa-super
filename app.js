@@ -1,7 +1,7 @@
 // ========================================
 // 📊 データ取得設定
 // ========================================
-const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbzcd5wHrhk4CjhRkaaaWpPBp0I5qjBGp0TUtPhRZyN_xOjY1O0MhclzmHDOueBUX4g/exec";
+const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwP1OlD57PYh_Gngf2RUXaGsGS_4_8IbW2rjbA_G3sTIgNIMUd5L-eCUd0zEgNAyETy/exec";
 
 // ========================================
 // 🌐 データ取得と表示
