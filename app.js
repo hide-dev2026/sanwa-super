@@ -103,9 +103,23 @@ function displayProducts(items) {
 }
 
 // ページ読み込み時にデータ取得
-window.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🔄 ページ読み込み完了");
   loadData();
 });
+
+// ========================================
+// ページ切り替え
+// ========================================
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.style.display = "none";
+  });
+  const target = document.getElementById(pageId);
+  if (target) {
+    target.style.display = "block";
+  }
+}
 
 // ========================================
 // Web Push 初期化（購読情報をGASで管理）
