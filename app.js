@@ -1,21 +1,17 @@
 // ========================================
 // 📊 データ取得設定
 // ========================================
-const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwP1OlD57PYh_Gngf2RUXaGsGS_4_8IbW2rjbA_G3sTIgNIMUd5L-eCUd0zEgNAyETy/exec";
+const DATA_GAS_URL = "https://script.google.com/macros/s/AKfycbwT9gz0cxYNIbxcBgtzNGb_gNeqS_kUEEPYsLwKIW6vvms5cJSDvmnwDpqBddcqcRFo/exec";
 
 // ========================================
 // 🌐 データ取得と表示
 // ========================================
-async function loadData() {
-  try {
-    console.log("📥 データ取得開始...");
-    
-    const response = await fetch(DATA_GAS_URL + "?action=sale", {
-      redirect: "follow"
-    });
-    console.log("📬 レスポンス:", response.status);
-    
-    const result = await response.json();
+function loadData() {
+  console.log("📥 データ取得開始...");
+
+  const callbackName = "handleData";
+
+  window[callbackName] = function(result) {
     console.log("📊 データ:", result);
 
     if (result.success && result.data) {
@@ -25,9 +21,12 @@ async function loadData() {
     } else {
       console.log("❌ エラー:", result.message);
     }
-  } catch (err) {
-    console.error("❌ データ取得エラー:", err);
-  }
+  };
+
+  const script = document.createElement("script");
+  script.src = `${DATA_GAS_URL}?action=sale&callback=${callbackName}`;
+
+  document.body.appendChild(script);
 }
 
 // ========================================
