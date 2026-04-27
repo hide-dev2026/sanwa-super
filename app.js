@@ -88,8 +88,8 @@ async function loadProducts() {
   rows.forEach(row => {
     if (!row.trim()) return;
 
-    const cols = row.split(",");
-    if (cols.length < 2) return;
+    // ★ここを修正
+    const cols = row.split("\t");
 
     const name = cols[0];
     const price = cols[1];
