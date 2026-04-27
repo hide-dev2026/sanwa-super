@@ -92,8 +92,13 @@ async function loadProducts() {
 
     const name = cols[0];
     const price = cols[1];
+
     const priceClean = price.replace(/[^\d]/g, "");
-    const priceFormatted = Number(priceClean).toLocaleString("ja-JP");
+    const priceNumber = parseInt(priceClean, 10);
+
+    const priceFormatted = isNaN(priceNumber)
+      ? price
+      : priceNumber.toLocaleString("ja-JP");
 
     const div = document.createElement("div");
     div.className = "product";
