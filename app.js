@@ -80,19 +80,20 @@ async function loadProducts() {
   const response = await fetch(PRODUCTS_CSV_URL);
   const text = await response.text();
 
-  const rows = text.split("\n").slice(1); // ヘッダー除外
+  const rows = text.split("\n").slice(1);
 
   const container = document.getElementById("product-list");
   container.innerHTML = "";
 
   rows.forEach(row => {
+    if (!row.trim()) return;
+
     const cols = row.split(",");
 
     const name = cols[0];
     const price = cols[1];
     const priceFormatted = Number(price).toLocaleString("ja-JP");
 
-    // 同じ行でHTMLを作る
     const div = document.createElement("div");
     div.className = "product";
 
