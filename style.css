@@ -103,6 +103,14 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   align-items: center;
 }
 
+.product-item {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background: #fff;
+}
+
 .sale-item {
   display: flex;
   justify-content: space-between;
