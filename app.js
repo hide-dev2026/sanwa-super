@@ -14,7 +14,7 @@ const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbzNayaMoZRjMtW0f
 // 📥 CSV取得
 // ========================================
 async function fetchCSV(url) {
-  const res = await fetch(url);
+  const res = await fetch(url + "&nocache=" + Date.now());
   const text = await res.text();
   return text.trim().split("\n").map(line => line.split(","));
 }
@@ -30,14 +30,24 @@ async function loadSales() {
 
     rows.slice(1).forEach(r => {
       const [name, price] = r;
+
       const div = document.createElement("div");
       div.className = "sale-item";
-      div.innerHTML = `
-        <h3>${name}</h3>
-        <p class="price">${price}</p>
-      `;
+
+      const nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = name;
+
+      const priceEl = document.createElement("span");
+      priceEl.className = "price";
+      priceEl.textContent = price;
+
+      div.appendChild(nameEl);
+      div.appendChild(priceEl);
+
       container.appendChild(div);
     });
+
   } catch (e) {
     console.error("特売取得エラー:", e);
   }
@@ -57,31 +67,54 @@ async function loadNotices() {
       p.textContent = r.join(" ");
       container.appendChild(p);
     });
+
   } catch (e) {
     console.error("お知らせ取得エラー:", e);
   }
 }
 
 // ========================================
-// 📦 商品情報
+// 📦 商品情報（←ここが今回の本命修正）
 // ========================================
 async function loadProducts() {
   try {
-    const row = document.createElement("div");
-    row.className = "product-row";
+    const rows = await fetchCSV(PRODUCTS_CSV_URL);
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
 
-    const nameEl = document.createElement("span");
-    nameEl.className = "name";
-    nameEl.textContent = name;
+    rows.slice(1).forEach(r => {
+      const [name, price, img] = r;
 
-    const priceEl = document.createElement("span");
-    priceEl.className = "price";
-    priceEl.textContent = price;
+      const card = document.createElement("div");
+      card.className = "product-item";
 
-    row.appendChild(nameEl);
-    row.appendChild(priceEl);
+      // 画像
+      if (img) {
+        const imgEl = document.createElement("img");
+        imgEl.src = img;
+        imgEl.alt = name;
+        card.appendChild(imgEl);
+      }
 
-    card.appendChild(row);
+      // 名前＋価格（横並び）
+      const row = document.createElement("div");
+      row.className = "product-row";
+
+      const nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = name;
+
+      const priceEl = document.createElement("span");
+      priceEl.className = "price";
+      priceEl.textContent = price;
+
+      row.appendChild(nameEl);
+      row.appendChild(priceEl);
+
+      card.appendChild(row);
+      container.appendChild(card);
+    });
+
   } catch (e) {
     console.error("商品取得エラー:", e);
   }
@@ -122,8 +155,7 @@ async function initPush() {
       });
     }
 
-    // GASへ送信
-    const res = await fetch(GAS_DEPLOY_URL, {
+    await fetch(GAS_DEPLOY_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -134,13 +166,7 @@ async function initPush() {
       })
     });
 
-    const result = await res.json();
-
-    if (result.success) {
-      alert("通知設定が完了しました");
-    } else {
-      alert("エラー：" + result.message);
-    }
+    alert("通知設定が完了しました");
 
   } catch (err) {
     console.error("Pushエラー:", err);
@@ -164,18 +190,12 @@ function urlBase64ToUint8Array(base64String) {
 // 🚀 初期処理
 // ========================================
 window.addEventListener("load", () => {
-  console.log("ページ読み込み");
-
-  // データ表示
   loadSales();
   loadNotices();
   loadProducts();
 
-  // 通知ボタン
   const btn = document.getElementById("notify-btn");
-  if (btn) {
-    btn.addEventListener("click", initPush);
-  }
+  if (btn) btn.addEventListener("click", initPush);
 });
 
 // ========================================
@@ -183,8 +203,6 @@ window.addEventListener("load", () => {
 // ========================================
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sanwa-super/service-worker.js")
-      .then(() => console.log("Service Worker登録成功"))
-      .catch(err => console.log("Service Worker登録失敗", err));
+    navigator.serviceWorker.register("/sanwa-super/service-worker.js");
   });
 }
