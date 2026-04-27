@@ -77,7 +77,7 @@ async function loadNotices() {
 // 📦 商品情報（←ここが今回の本命修正）
 // ========================================
 async function loadProducts() {
-  const response = await fetch(SALES_CSV_URL);
+  const response = await fetch(PRODUCTS_CSV_URL);
   const text = await response.text();
 
   const rows = text.split("\n").slice(1); // ヘッダー除外
