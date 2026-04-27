@@ -80,7 +80,7 @@ async function loadProducts() {
   const response = await fetch(PRODUCTS_CSV_URL);
   const text = await response.text();
 
-  const rows = text.split("\n").slice(1);
+  const rows = text.split(/\r?\n/).slice(1);
 
   const container = document.getElementById("product-list");
   container.innerHTML = "";
@@ -89,6 +89,7 @@ async function loadProducts() {
     if (!row.trim()) return;
 
     const cols = row.split(",");
+    if (cols.length < 2) return;
 
     const name = cols[0];
     const price = cols[1];
