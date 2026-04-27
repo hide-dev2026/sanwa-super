@@ -97,6 +97,12 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   margin-top: 0;
 }
 
+.product-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .sale-item {
   display: flex;
   justify-content: space-between;

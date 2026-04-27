@@ -67,34 +67,21 @@ async function loadNotices() {
 // ========================================
 async function loadProducts() {
   try {
-    const rows = await fetchCSV(PRODUCTS_CSV_URL);
-    const container = document.getElementById("product-list");
-    container.innerHTML = "";
+    const row = document.createElement("div");
+    row.className = "product-row";
 
-    rows.slice(1).forEach(r => {
-      const [name, price, img] = r;
+    const nameEl = document.createElement("span");
+    nameEl.className = "name";
+    nameEl.textContent = name;
 
-      const card = document.createElement("div");
-      card.className = "product-item";
+    const priceEl = document.createElement("span");
+    priceEl.className = "price";
+    priceEl.textContent = price;
 
-      if (img) {
-        const imgEl = document.createElement("img");
-        imgEl.src = img;
-        imgEl.alt = name;
-        card.appendChild(imgEl);
-      }
+    row.appendChild(nameEl);
+    row.appendChild(priceEl);
 
-      const title = document.createElement("h3");
-      title.textContent = name;
-
-      const p = document.createElement("p");
-      p.textContent = price;
-
-      card.appendChild(title);
-      card.appendChild(p);
-
-      container.appendChild(card);
-    });
+    card.appendChild(row);
   } catch (e) {
     console.error("商品取得エラー:", e);
   }
