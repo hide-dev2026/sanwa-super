@@ -90,6 +90,7 @@ async function loadProducts() {
 
     const name = cols[0];
     const price = cols[1];
+    const priceFormatted = Number(price).toLocaleString("ja-JP");
 
     // 同じ行でHTMLを作る
     const div = document.createElement("div");
@@ -97,7 +98,7 @@ async function loadProducts() {
 
     div.innerHTML = `
       <span class="name">${name}</span>
-      <span class="price">¥${price}</span>
+      <span class="price">${priceFormatted}円</span>
     `;
 
     container.appendChild(div);
