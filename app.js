@@ -74,7 +74,7 @@ async function loadNotices() {
 }
 
 // ========================================
-// 📦 商品情報（←ここが今回の本命修正）
+// 📦 商品情報
 // ========================================
 async function loadProducts() {
   const response = await fetch(PRODUCTS_CSV_URL);
@@ -92,7 +92,8 @@ async function loadProducts() {
 
     const name = cols[0];
     const price = cols[1];
-    const priceFormatted = Number(price).toLocaleString("ja-JP");
+    const priceClean = price.replace(/[^\d]/g, "");
+    const priceFormatted = Number(priceClean).toLocaleString("ja-JP");
 
     const div = document.createElement("div");
     div.className = "product";
