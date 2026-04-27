@@ -77,47 +77,31 @@ async function loadNotices() {
 // 📦 商品情報（←ここが今回の本命修正）
 // ========================================
 async function loadProducts() {
-  try {
-    const rows = await fetchCSV(PRODUCTS_CSV_URL);
-    const container = document.getElementById("product-list");
-    container.innerHTML = "";
+  const response = await fetch(SALES_CSV_URL);
+  const text = await response.text();
 
-    rows.slice(1).forEach(r => {
-      const [name, price, img] = r;
+  const rows = text.split("\n").slice(1); // ヘッダー除外
 
-      const card = document.createElement("div");
-      card.className = "product-item";
+  const container = document.getElementById("product-list");
+  container.innerHTML = "";
 
-      // 画像
-      if (img) {
-        const imgEl = document.createElement("img");
-        imgEl.src = img;
-        imgEl.alt = name;
-        card.appendChild(imgEl);
-      }
+  rows.forEach(row => {
+    const cols = row.split(",");
 
-      // 名前＋価格（横並び）
-      const row = document.createElement("div");
-      row.className = "product-row";
+    const name = cols[0];
+    const price = cols[1];
 
-      const nameEl = document.createElement("span");
-      nameEl.className = "name";
-      nameEl.textContent = name;
+    // 同じ行でHTMLを作る
+    const div = document.createElement("div");
+    div.className = "product";
 
-      const priceEl = document.createElement("span");
-      priceEl.className = "price";
-      priceEl.textContent = price;
+    div.innerHTML = `
+      <span class="name">${name}</span>
+      <span class="price">¥${price}</span>
+    `;
 
-      row.appendChild(nameEl);
-      row.appendChild(priceEl);
-
-      card.appendChild(row);
-      container.appendChild(card);
-    });
-
-  } catch (e) {
-    console.error("商品取得エラー:", e);
-  }
+    container.appendChild(div);
+  });
 }
 
 // ========================================
