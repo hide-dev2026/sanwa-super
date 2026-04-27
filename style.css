@@ -111,6 +111,12 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   background: #fff;
 }
 
+.product {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .sale-item {
   display: flex;
   justify-content: space-between;
@@ -127,6 +133,8 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 }
 
 .price {
+  text-align: right;
+  min-width: 80px;
   color: #e74c3c;
   font-weight: bold;
 }
