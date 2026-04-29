@@ -89,7 +89,7 @@ async function loadProducts() {
     if (!row.trim()) return;
 
     // ★ここを修正
-    const cols = row.split("\t");
+    const cols = row.split(",").map(c => c.trim());
 
     const name = cols[0];
     const price = cols[1];
