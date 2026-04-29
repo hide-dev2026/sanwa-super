@@ -82,8 +82,6 @@ async function loadProducts() {
     const container = document.getElementById("product-list");
     container.innerHTML = "";
 
-    console.log(rows);
-
     rows.slice(1).forEach(cols => {
       if (!cols || cols.length < 2) return;
 
