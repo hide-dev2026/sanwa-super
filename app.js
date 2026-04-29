@@ -90,6 +90,8 @@ async function loadProducts() {
       const name = cols[0];
       const price = cols.slice(1).join(""); // ←ここ重要
 
+      console.log("追加:", name, price);
+      
       if (!name || !price) return;
 
       const priceNumber = parseInt(price.replace(/[^\d]/g, ""), 10);
