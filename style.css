@@ -7,7 +7,7 @@ header h1 { margin:0; font-size:1.5em; }
 header button { background:white; color:#3b6ee6; border:none; padding:5px 10px; border-radius:4px; }
 
 /* ページコンテナ */
-.page { padding:10px; max-width:600px; margin:0 auto; }
+.page { padding:10px; padding-bottom: 80px; max-width:600px; margin:0 auto; }
 
 /* 汎用カードスタイル */
 .card { border:1px solid #ccc; border-radius:6px; padding:10px; margin:10px 0; background:#fff; transition: transform 0.2s, box-shadow 0.2s; }
