@@ -87,11 +87,9 @@ async function loadProducts() {
     rows.slice(1).forEach(cols => {
       if (!cols || cols.length < 2) return;
 
-      const name = cols[0];
-      const price = cols.slice(1).join(""); // ←ここ重要
+      const name = cols[0]?.trim();
+      const price = cols[1]?.trim();
 
-      console.log("追加:", name, price);
-      
       if (!name || !price) return;
 
       const priceNumber = parseInt(price.replace(/[^\d]/g, ""), 10);
@@ -102,10 +100,16 @@ async function loadProducts() {
       const div = document.createElement("div");
       div.className = "product";
 
-      div.innerHTML = `
-        <span class="name">${name}</span>
-        <span class="price">${priceFormatted}円</span>
-      `;
+      const nameEl = document.createElement("span");
+      nameEl.className = "name";
+      nameEl.textContent = name;
+
+      const priceEl = document.createElement("span");
+      priceEl.className = "price";
+      priceEl.textContent = priceFormatted + "円";
+
+      div.appendChild(nameEl);
+      div.appendChild(priceEl);
 
       container.appendChild(div);
     });
