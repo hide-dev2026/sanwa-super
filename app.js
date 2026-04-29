@@ -82,10 +82,7 @@ async function loadProducts() {
     const container = document.getElementById("product-list");
     container.innerHTML = "";
 
-    console.log(rows);
-
     rows.slice(1).forEach(cols => {
-      console.log(cols);
       const name = cols[0];
       const price = cols[1];
 
