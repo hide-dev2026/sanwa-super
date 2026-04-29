@@ -85,9 +85,10 @@ async function loadProducts() {
     console.log(rows);
 
     rows.slice(1).forEach(cols => {
-      console.log(cols);
+      if (!cols || cols.length < 2) return;
+
       const name = cols[0];
-      const price = cols[1];
+      const price = cols.slice(1).join(""); // ←ここ重要
 
       if (!name || !price) return;
 
