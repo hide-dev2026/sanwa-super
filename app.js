@@ -77,42 +77,37 @@ async function loadNotices() {
 // 📦 商品情報
 // ========================================
 async function loadProducts() {
-  const response = await fetch(PRODUCTS_CSV_URL);
-  const text = await response.text();
+  try {
+    const rows = await fetchCSV(PRODUCTS_CSV_URL);
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
 
-  const rows = text.split(/\r?\n/).slice(1);
+    rows.slice(1).forEach(cols => {
+      const name = cols[0];
+      const price = cols[1];
 
-  const container = document.getElementById("product-list");
-  container.innerHTML = "";
+      if (!name || !price) return;
 
-  rows.forEach(row => {
-    if (!row.trim()) return;
+      const priceNumber = parseInt(price.replace(/[^\d]/g, ""), 10);
+      const priceFormatted = isNaN(priceNumber)
+        ? price
+        : priceNumber.toLocaleString("ja-JP");
 
-    // ★ここを修正
-    const cols = row.split(",").map(c => c.trim());
+      const div = document.createElement("div");
+      div.className = "product";
 
-    const name = cols[0];
-    const price = cols[1];
+      div.innerHTML = `
+        <span class="name">${name}</span>
+        <span class="price">${priceFormatted}円</span>
+      `;
 
-    const priceClean = price.replace(/[^\d]/g, "");
-    const priceNumber = parseInt(priceClean, 10);
+      container.appendChild(div);
+    });
 
-    const priceFormatted = isNaN(priceNumber)
-      ? price
-      : priceNumber.toLocaleString("ja-JP");
-
-    const div = document.createElement("div");
-    div.className = "product";
-
-    div.innerHTML = `
-      <span class="name">${name}</span>
-      <span class="price">${priceFormatted}円</span>
-    `;
-
-    container.appendChild(div);
-  });
+  } catch (e) {
+    console.error("商品取得エラー:", e);
+  }
 }
-
 // ========================================
 // 📄 ページ切り替え
 // ========================================
