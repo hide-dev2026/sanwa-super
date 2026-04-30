@@ -133,6 +133,8 @@ function showPage(pageId) {
 // ========================================
 async function initPush() {
   try {
+    console.log("① initPush開始");
+
     const permission = await Notification.requestPermission();
 
     if (permission !== "granted") {
@@ -160,6 +162,8 @@ async function initPush() {
 }
 
 function sendSubscriptionJSONP(subscription) {
+  console.log("② JSONP送信開始");
+  
   const callbackName = "jsonpCallback_" + Date.now();
 
   // グローバルにコールバック関数を定義
