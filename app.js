@@ -8,7 +8,7 @@ const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9
 // ========================================
 // 🔔 GAS（購読保存用）
 // ========================================
-const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbxe0uRQhVsiPwCeuQzZFt2M1M0tcRs5BsVVGJzGxVUlngAhzQWyvFE_MuncakWv7f5F/execs";
+const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbxe0uRQhVsiPwCeuQzZFt2M1M0tcRs5BsVVGJzGxVUlngAhzQWyvFE_MuncakWv7f5F/exec";
 
 // ========================================
 // 📥 CSV取得
@@ -163,7 +163,7 @@ async function initPush() {
 
 function sendSubscriptionJSONP(subscription) {
   console.log("② JSONP送信開始");
-  
+
   const callbackName = "jsonpCallback_" + Date.now();
 
   // グローバルにコールバック関数を定義
