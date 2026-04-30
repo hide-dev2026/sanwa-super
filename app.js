@@ -155,7 +155,7 @@ async function initPush() {
 
     // ★ fetchは使わない！
     sendSubscription(subscription);
-    
+
   } catch (err) {
     console.error("Pushエラー:", err);
   }
@@ -183,18 +183,6 @@ async function sendSubscription(subscription) {
   } else {
     alert("保存失敗: " + data.message);
   }
-}
-
-  const url =
-    GAS_DEPLOY_URL +
-    "?action=subscribe" +
-    "&data=" + encodeURIComponent(JSON.stringify(subscription)) +
-    "&callback=" + callbackName;
-
-  const script = document.createElement("script");
-  script.src = url;
-
-  document.body.appendChild(script);
 }
 
 // ========================================
