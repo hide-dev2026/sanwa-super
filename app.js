@@ -164,16 +164,16 @@ async function initPush() {
 async function sendSubscription(subscription) {
   console.log("② POST送信開始");
 
-  const res = await fetch(GAS_DEPLOY_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      action: "subscribe",
-      subscription: subscription
-    })
-  });
+const res = await fetch(GAS_DEPLOY_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain"
+  },
+  body: JSON.stringify({
+    action: "subscribe",
+    subscription: subscription
+  })
+});
 
   const data = await res.json();
   console.log("保存結果:", data);
