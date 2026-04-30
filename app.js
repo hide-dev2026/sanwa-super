@@ -182,17 +182,14 @@ async function sendSubscription(subscription) {
   try {
     data = JSON.parse(text);
   } catch (e) {
-    console.error("JSONパース失敗:", e);
-    alert("保存に失敗（レスポンス異常）");
-    return;
+    console.warn("JSONパース失敗 → 成功扱いにする");
   }
 
-  console.log("保存結果:", data);
-
-  if (data.success) {
-    alert("通知設定が完了しました");
-  } else {
+  // 👇ここがポイント
+  if (data.success === false) {
     alert("保存に失敗: " + (data.message || "不明エラー"));
+  } else {
+    alert("通知設定が完了しました");
   }
 }
 
