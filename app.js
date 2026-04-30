@@ -129,7 +129,7 @@ function showPage(pageId) {
 }
 
 // ========================================
-// 🔔 Push通知登録
+// 🔔 Push通知登録（JSONP版）
 // ========================================
 async function initPush() {
   try {
@@ -151,22 +151,42 @@ async function initPush() {
       });
     }
 
-    await fetch(GAS_DEPLOY_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "subscribe",
-        subscription: subscription
-      })
-    });
-
-    alert("通知設定が完了しました");
+    // JSONP送信
+    sendSubscriptionJSONP(subscription);
 
   } catch (err) {
     console.error("Pushエラー:", err);
   }
+}
+
+function sendSubscriptionJSONP(subscription) {
+  const callbackName = "jsonpCallback_" + Date.now();
+
+  // グローバルにコールバック関数を定義
+  window[callbackName] = function (response) {
+    console.log("保存結果:", response);
+
+    if (response.success) {
+      alert("通知設定が完了しました");
+    } else {
+      alert("保存に失敗: " + response.message);
+    }
+
+    // 後始末（メモリリーク防止）
+    delete window[callbackName];
+    script.remove();
+  };
+
+  const url =
+    GAS_DEPLOY_URL +
+    "?action=subscribe" +
+    "&data=" + encodeURIComponent(JSON.stringify(subscription)) +
+    "&callback=" + callbackName;
+
+  const script = document.createElement("script");
+  script.src = url;
+
+  document.body.appendChild(script);
 }
 
 // ========================================
