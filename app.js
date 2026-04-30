@@ -164,24 +164,35 @@ async function initPush() {
 async function sendSubscription(subscription) {
   console.log("② POST送信開始");
 
-const res = await fetch(GAS_DEPLOY_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain"
-  },
-  body: JSON.stringify({
-    action: "subscribe",
-    subscription: subscription
-  })
-});
+  const res = await fetch(GAS_DEPLOY_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain"
+    },
+    body: JSON.stringify({
+      action: "subscribe",
+      subscription: subscription
+    })
+  });
 
-  const data = await res.json();
+  const text = await res.text();
+  console.log("生レスポンス:", text);
+
+  let data;
+  try {
+    data = JSON.parse(text);
+  } catch (e) {
+    console.error("JSONパース失敗:", e);
+    alert("保存に失敗（レスポンス異常）");
+    return;
+  }
+
   console.log("保存結果:", data);
 
   if (data.success) {
     alert("通知設定が完了しました");
   } else {
-    alert("保存失敗: " + data.message);
+    alert("保存に失敗: " + (data.message || "不明エラー"));
   }
 }
 
