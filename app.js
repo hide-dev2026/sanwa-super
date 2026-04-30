@@ -154,32 +154,36 @@ async function initPush() {
     }
 
     // ★ fetchは使わない！
-    sendSubscriptionJSONP(subscription);
-
+    sendSubscription(subscription);
+    
   } catch (err) {
     console.error("Pushエラー:", err);
   }
 }
 
-function sendSubscriptionJSONP(subscription) {
-  console.log("② JSONP送信開始");
+async function sendSubscription(subscription) {
+  console.log("② POST送信開始");
 
-  const callbackName = "jsonpCallback_" + Date.now();
+  const res = await fetch(GAS_DEPLOY_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "subscribe",
+      subscription: subscription
+    })
+  });
 
-  // グローバルにコールバック関数を定義
-  window[callbackName] = function (response) {
-    console.log("保存結果:", response);
+  const data = await res.json();
+  console.log("保存結果:", data);
 
-    if (response.success) {
-      alert("通知設定が完了しました");
-    } else {
-      alert("保存に失敗: " + response.message);
-    }
-
-    // 後始末（メモリリーク防止）
-    delete window[callbackName];
-    script.remove();
-  };
+  if (data.success) {
+    alert("通知設定が完了しました");
+  } else {
+    alert("保存失敗: " + data.message);
+  }
+}
 
   const url =
     GAS_DEPLOY_URL +
