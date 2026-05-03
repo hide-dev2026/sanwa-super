@@ -48,8 +48,9 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// ★★★★★ ここが超重要 ★★★★★
-// プッシュ通知の受信（これだけにする）
+// ========================================
+// 🔔 プッシュ通知の受信
+// ========================================
 self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
 
@@ -58,8 +59,37 @@ self.addEventListener('push', event => {
       data.title || "新しい通知",
       {
         body: data.body || "内容がありません",
-        icon: "/sanwa-super/sanwa_super_icon_192.png"
+        icon: "/sanwa-super/sanwa_super_icon_192.png",
+
+        data: {
+          url: data.url || "/"
+        }
       }
     )
+  );
+});
+
+// ========================================
+// 🔔 通知クリック時の動作
+// ========================================
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+
+  const urlToOpen = event.notification.data?.url || '/sanwa-super/index.html';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then(windowClients => {
+
+        // 既に開いているタブがあればそれを使う
+        for (let client of windowClients) {
+          if (client.url.includes('/sanwa-super/') && 'focus' in client) {
+            return client.focus();
+          }
+        }
+
+        // なければ新規で開く
+        return clients.openWindow(urlToOpen);
+      })
   );
 });
