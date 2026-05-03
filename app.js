@@ -144,16 +144,28 @@ async function initPush() {
 
     const registration = await navigator.serviceWorker.ready;
 
-    let subscription = await registration.pushManager.getSubscription();
-
-    if (!subscription) {
-      subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array("BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM")
-      });
+    // ========================================
+    // 🔄 ここが重要：古いsubscriptionを必ず破棄
+    // ========================================
+    const oldSub = await registration.pushManager.getSubscription();
+    if (oldSub) {
+      console.log("古いsubscriptionを削除");
+      await oldSub.unsubscribe();
     }
 
-    // ★ fetchは使わない！
+    // ========================================
+    // 🆕 新規subscriptionを作成
+    // ========================================
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: urlBase64ToUint8Array(
+        "BGp9U_uO-3Xh1rHHdGgGH24L3abnjnHd0wkTFTZtAkBCEU1Gkxv01IT911WPmYsOcovvY51ZLp1Gek0RhV6MPmM"
+      )
+    });
+
+    console.log("新しいsubscription作成:", subscription);
+
+    // GASへ送信
     sendSubscription(subscription);
 
   } catch (err) {
