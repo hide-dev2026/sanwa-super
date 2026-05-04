@@ -8,7 +8,7 @@ const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9
 // ========================================
 // 🔔 GAS（購読保存用）
 // ========================================
-const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbwY2iYLD9h5Buouigak9LWrAW7meaw1X00NyzhlvISVAwpBjKdgQ1b6GAFoect2wdCE/exec";
+const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbyqX5QNtNWsoMaAjDb0o9SKVAiBoqP8PhWY0l23QBi98EjCpfg9CvqXisecyannrQbv/exec";
 
 // ========================================
 // 📥 CSV取得
