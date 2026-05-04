@@ -8,12 +8,16 @@
 <body>
   <h1>お客様へPush通知送信</h1>
 
-  <label>タイトル：</label>
-  <input id="title" type="text"><br><br>
+  <div class="form-row">
+    <label>タイトル</label>
+    <input type="text">
+  </div>
 
-  <label>本文：</label>
-  <input id="body" type="text"><br><br>
-
+  <div class="form-row">
+    <label>本文</label>
+    <textarea></textarea>
+  </div>
+  
   <button onclick="send()">送信</button>
 
   <p id="result"></p>

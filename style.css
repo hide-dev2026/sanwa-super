@@ -238,3 +238,17 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   margin-left: auto;
   margin-right: auto;
 }
+
+.form-row {
+  display: flex;
+  align-items: center;
+}
+
+.form-row label {
+  width: 100px;
+}
+
+.form-row input,
+.form-row textarea {
+  flex: 1;
+}
