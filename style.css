@@ -253,4 +253,5 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 .form-row input,
 .form-row textarea {
   flex: 1;
+  width: auto;
 }
