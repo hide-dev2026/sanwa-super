@@ -242,7 +242,7 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .form-row label {
