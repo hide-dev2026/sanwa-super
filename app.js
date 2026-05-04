@@ -8,7 +8,7 @@ const PRODUCTS_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTI_Y9
 // ========================================
 // 🔔 GAS（購読保存用）
 // ========================================
-const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbxfegH1HwONrVyoMOZLBswD88aHuTiShsIyS5V-BzHgw6LsU5XgU-KPS2Xa4qlr9LTp/exec";
+const GAS_DEPLOY_URL = "https://script.google.com/macros/s/AKfycbxGzGl0K09_nTEo-BCGY7AxFcIu4HZDtu7OdTn1wf3n13h-Un_X83MbNFwaD-wijSOv/exec";
 
 // ========================================
 // 📥 CSV取得
@@ -179,7 +179,7 @@ async function sendSubscription(subscription) {
   const res = await fetch(GAS_DEPLOY_URL, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "text/plain"
     },
     body: JSON.stringify({
       action: "subscribe",
