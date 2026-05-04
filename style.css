@@ -242,10 +242,12 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 .form-row {
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
 }
 
 .form-row label {
-  width: 100px;
+  width: 80px;
+  flex-shrink: 0;
 }
 
 .form-row input,
