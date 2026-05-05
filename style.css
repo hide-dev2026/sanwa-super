@@ -240,17 +240,27 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 }
 
 /* --- 管理画面用のスタイル --- */
+.admin-container {
+  padding-left: 20px;  /* ★この箱の内側だけに左余白を作る */
+  padding-right: 20px;
+  padding-top: 20px;
+  max-width: 600px; 
+}
 
+.admin-container h1 {
+  color: #ff0000; /* 鮮やかな赤色 */
+  margin-left: 20px;
+}
 /* タイトル行と本文行の間の余白 */
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 30px; /* ★タイトルと本文の間の行間を広げました */
+  margin-bottom: 30px;
 }
 
 /* ラベル（タイトル・本文という文字）の幅を統一 */
 .form-row label {
-  width: 80px;         /* ★幅を統一して縦のラインを揃えます */
+  width: 80px;   
   display: inline-block;
   font-weight: bold;
 }
@@ -265,14 +275,14 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 
 /* 本文と送信ボタンの間の余白 */
 .submit-btn {
-  margin-top: 50px;    /* ★本文と送信ボタンの間の行間を大きく空けました */
+  margin-top: 50px;   
   padding: 10px 25px;
   background-color: #3b6ee6;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  display: block;      /* ボタンを独立した行として扱います */
+  display: block;
 }
 
 .submit-btn:hover {

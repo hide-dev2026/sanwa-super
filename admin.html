@@ -7,19 +7,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>お客様へPush通知</h1>
+  <div class="admin-container">
+    <h1>お客様へPush通知</h1>
 
-  <div class="form-row">
-    <label>タイトル</label>
-    <input id="title" type="text">
+    <div class="form-row">
+      <label>タイトル</label>
+      <input id="title" type="text">
+    </div>
+
+    <div class="form-row">
+      <label>本　　文</label>
+      <input id="body" type="text">
+    </div>
+
+    <button class="submit-btn" onclick="send()">送信</button>
   </div>
-
-  <div class="form-row">
-    <label>本　　文</label>
-    <input id="body" type="text">
-  </div>
-
-  <button class="submit-btn" onclick="send()">送信</button>
 
   <p id="result"></p>
 
