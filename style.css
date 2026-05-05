@@ -239,32 +239,42 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   margin-right: auto;
 }
 
-.submit-btn {
-  margin-top: 40px;    /* ★ ここでボタンより上の余白を自由に設定できます */
-  padding: 10px 20px;
-  background-color: #3b6ee6;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-  display: block;      /* ボタンを独立した行にする場合 */
-}
+/* --- 管理画面用のスタイル --- */
 
+/* タイトル行と本文行の間の余白 */
 .form-row {
   display: flex;
   align-items: center;
-  margin-bottom: 40px
+  margin-bottom: 30px; /* ★タイトルと本文の間の行間を広げました */
 }
 
+/* ラベル（タイトル・本文という文字）の幅を統一 */
 .form-row label {
-  width: 100px;
+  width: 80px;         /* ★幅を統一して縦のラインを揃えます */
   display: inline-block;
   font-weight: bold;
 }
 
-.form-row input,
-.form-row textarea {
-  flex: 1;       /* 入力欄を横幅いっぱいに広げる */
+/* 入力欄の調整 */
+.form-row input {
+  flex: 1;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+/* 本文と送信ボタンの間の余白 */
+.submit-btn {
+  margin-top: 50px;    /* ★本文と送信ボタンの間の行間を大きく空けました */
+  padding: 10px 25px;
+  background-color: #3b6ee6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;      /* ボタンを独立した行として扱います */
+}
+
+.submit-btn:hover {
+  background-color: #2a52b3;
 }
