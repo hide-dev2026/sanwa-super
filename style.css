@@ -247,11 +247,14 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 
 .form-row label {
   width: 100px;
-  margin-right: 10px;
+  display: inline-block;
+  font-weight: bold;
 }
 
 .form-row input,
 .form-row textarea {
-  flex: 1;
-  width: auto;
+  flex: 1;       /* 入力欄を横幅いっぱいに広げる */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
