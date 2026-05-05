@@ -257,7 +257,7 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 
 /* 入力欄の調整 */
 .form-row input {
-  flex: 1;
+  width: 300px;
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
