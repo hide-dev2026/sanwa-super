@@ -239,6 +239,16 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   margin-right: auto;
 }
 
+.submit-btn {
+  margin-top: 40px;    /* ★ ここでボタンより上の余白を自由に設定できます */
+  padding: 10px 20px;
+  background-color: #3b6ee6;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;      /* ボタンを独立した行にする場合 */
+}
+
 .form-row {
   display: flex;
   align-items: center;
