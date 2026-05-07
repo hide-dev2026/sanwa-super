@@ -181,20 +181,24 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
   margin: 6px 0;
 }
 
-/* 住所と地図ボタンを横並びにし左寄せ */
+/* 住所と地図ボタンのエリア */
 .store-address {
-  position: relative;
   display: flex;
+  flex-wrap: wrap;                /* ★入り切らない時、折り返しを許可 */
   align-items: center;
+  justify-content: space-between; /* ★テキストとボタンを両端に配置 */
   text-align: left;
-  margin: 60px 0 24px; /* 上部に余白を追加して定休日との間隔を強調 */
+  margin: 40px 0 24px;            /* 上部に余白を追加して定休日との間隔を強調 */
+  gap: 10px;                      /* テキストとボタンの間にスペースを追加 */
 }
 .store-address p {
   margin: 0;
+  flex: 1;          /* ★テキストが可能な限りスペースを取るように */
+  min-width: 200px; /* ★テキストがあまりに狭くならないように最低幅を設定 */
 }
 .store-address button {
-  position: absolute;
-  right: 0;
+  position: static;      /* ★絶対配置を解除してフレックス内で自然に配置 */
+  right: 0;              /* ★右寄せはフレックスのjustify-contentで対応 */
 }
 
 /* お問い合わせも左寄せ */
@@ -205,19 +209,21 @@ footer { position:fixed; bottom:0; width:100%; display:flex; justify-content:spa
 
 /* 電話番号と発信ボタン */
 .store-phone {
-  position: relative;
   display: flex;
+  flex-wrap: wrap;                /* ★入り切らない時、折り返しを許可 */
   align-items: center;
+  justify-content: space-between; /* ★テキストとボタンを両端に配置 */
   text-align: left;
   margin: 12px 0;
+  gap:10px;                       /* テキストとボタンの間にスペースを追加 */
 }
 .store-phone span {
   flex: 1;
+  min-width: 150px;      /* ★テキストがあまりに狭くならないように最低幅を設定 */
 }
 .store-phone button {
-  position: absolute;
-  right: 0;
-  margin-left: 0;
+  position: static;      /* ★絶対配置を解除してフレックス内で自然に配置 */
+  margin: 0;
 }
 
 /* 地図と電話ボタンの幅を統一 */
